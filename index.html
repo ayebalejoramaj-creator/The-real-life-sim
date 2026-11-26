@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080d1c">
+<title>Reality // World Simulator V3</title>
+<style>
+:root{--bg:#080d1c;--panel:#111a2d;--panel2:#17233a;--line:#293954;--gold:#e8b83e;--muted:#9aa9c0;--text:#f4f6fb;--green:#69d6a4;--red:#ff8585}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#14213b 0,#080d1c 48%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:22px 18px 14px;max-width:1100px;margin:auto}header .brand{letter-spacing:.2em;color:var(--gold);font-weight:900;font-size:14px}header h1{font-size:clamp(27px,6vw,42px);line-height:1.08;margin:12px 0 8px}header p{color:var(--muted);margin:0}
+main{max-width:1100px;margin:auto;padding:0 14px 40px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:16px 0}.stat,.panel{background:linear-gradient(145deg,#121d32,#0d1527);border:1px solid var(--line);border-radius:17px;padding:14px}.stat strong{display:block;color:var(--gold);font-size:clamp(18px,4vw,25px);overflow-wrap:anywhere}.stat span{color:var(--muted);font-size:12px}
+.layout{display:grid;grid-template-columns:1.25fr .75fr;gap:12px}.panel{margin-bottom:12px}.panel h2{font-size:19px;margin:0 0 12px}.panel h3{font-size:15px;margin:14px 0 7px;color:var(--gold)}.muted{color:var(--muted)}.small{font-size:12px;color:var(--muted)}.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.split{display:flex;justify-content:space-between;gap:10px;align-items:center}.pill{border:1px solid var(--line);padding:5px 9px;border-radius:99px;color:var(--muted);font-size:12px}
+button,select,input{font:inherit}button{background:#24344f;border:1px solid #3a4d6b;color:var(--text);padding:10px 13px;border-radius:11px;cursor:pointer}button.primary{background:var(--gold);border-color:var(--gold);color:#101522;font-weight:800}button:disabled{opacity:.4;cursor:not-allowed}button:hover{filter:brightness(1.12)}.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.actions button{text-align:left;min-height:58px}.actions button b{display:block}.actions button span{font-size:11px;color:#b8c4d7}
+select,input{background:#0b1426;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;width:100%;margin:4px 0 8px}
+.progress{height:8px;background:#26334b;border-radius:99px;overflow:hidden;margin:5px 0 10px}.progress i{display:block;height:100%;background:var(--gold);width:0}
+.item{padding:10px 0;border-bottom:1px solid #24324a}.item:last-child{border:0}.tag{font-size:11px;color:var(--green)}.log{max-height:330px;overflow:auto}.log p{margin:0;padding:9px 0;border-bottom:1px solid #24324a;color:#c9d3e3;font-size:13px}.chat{background:#0b1426;border:1px solid #263752;border-radius:12px;padding:10px;margin:8px 0}.chat p{margin:5px 0;color:#d8e0ed;font-size:13px}.chat .who{color:var(--gold);font-weight:700;font-size:12px}.choice{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.choice button{font-size:13px;padding:8px 10px}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:15px}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}header{padding-top:18px}.actions{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand">REALITY // WORLD SIMULATOR</div>
+ <h1>Your life. Your choices. Your development.</h1>
+ <p>Build an education, career, network and future in a changing world. Every turn represents six months.</p>
+</header>
+<main>
+ <section class="stats">
+  <div class="stat"><strong id="cash">UGX 500,000</strong><span>Available cash</span></div>
+  <div class="stat"><strong id="age">18</strong><span>Age</span></div>
+  <div class="stat"><strong id="level">1</strong><span>Development level</span></div>
+  <div class="stat"><strong id="year">2026</strong><span>Simulated year</span></div>
+ </section>
+ <div class="layout">
+  <div>
+   <section class="panel">
+    <div class="split"><h2>Player profile</h2><span class="pill" id="status">Exploring options</span></div>
+    <div class="row"><span class="pill" id="edu">Education: Secondary school</span><span class="pill" id="job">Employment: Unemployed</span></div>
+    <h3>Core attributes</h3>
+    <div id="skills"></div>
+    <h3>Current goals</h3><div id="goals" class="muted">Complete your education, develop useful skills and find a career direction.</div>
+   </section>
+   <section class="panel">
+    <h2>Choose your next move</h2>
+    <div class="actions">
+     <button onclick="study()"><b>📚 Study / attend school</b><span>Improve grades and knowledge</span></button>
+     <button onclick="university()"><b>🎓 University & training</b><span>Apply for higher education</span></button>
+     <button onclick="work()"><b>💼 Find / develop a job</b><span>Apply, interview or advance</span></button>
+     <button onclick="sideHustle()"><b>🛠️ Freelance / side hustle</b><span>Earn and gain experience</span></button>
+     <button onclick="social()"><b>💬 Friend group chat</b><span>Build relationships and network</span></button>
+     <button onclick="pta()"><b>🏫 PTA & school life</b><span>Handle school and family decisions</span></button>
+     <button onclick="train()"><b>🏃 Practise & develop skills</b><span>Sports, music, leadership and more</span></button>
+     <button onclick="advance()"><b>⏩ Advance six months</b><span>Age, events, wages and changes</span></button>
+    </div>
+   </section>
+   <section class="panel">
+    <h2>Career explorer</h2>
+    <p class="small">Choose a professional path to shape job opportunities and training.</p>
+    <select id="career"></select>
+    <button class="primary" onclick="chooseCareer()">Set career ambition</button>
+    <div id="careerInfo" class="small" style="margin-top:8px"></div>
+   </section>
+   <section class="panel">
+    <h2>Education pathway</h2>
+    <div id="educationInfo"></div>
+   </section>
+  </div>
+  <div>
+   <section class="panel">
+    <h2>Friends & group chat</h2>
+    <div id="friends"></div>
+    <div class="choice"><button onclick="sendChat('support')">Encourage someone</button><button onclick="sendChat('network')">Share an opportunity</button><button onclick="sendChat('hangout')">Arrange a meetup</button></div>
+   </section>
+   <section class="panel">
+    <h2>Current opportunities</h2><div id="opportunities"></div>
+   </section>
+   <section class="panel">
+    <div class="split"><h2>Life events</h2><button onclick="saveGame()">Save</button></div>
+    <div class="log" id="log"></div>
+   </section>
+   <section class="panel">
+    <h2>Player controls</h2>
+    <div class="row"><button onclick="saveGame()">Save progress</button><button onclick="resetGame()">New life</button></div>
+    <p class="small">Progress saves on this device/browser. Clearing browser data or switching devices may remove this local save.</p>
+   </section>
+  </div>
+ </div>
+</main>
+<footer>V3 DEVELOPMENT BUILD · Fictional simulation · Not real financial, career, military or educational advice.</footer>
+<script>
+const professions=[
+["Software developer","Technology","technical"],["AI / machine-learning specialist","Technology","technical"],["Cybersecurity analyst","Technology","technical"],["Data analyst","Technology","technical"],["Doctor","Health","academic"],["Nurse / paramedic","Health","care"],["Biomedical scientist","Science","academic"],["Engineer","Engineering","technical"],["Architect","Construction","creative"],["Teacher","Education","care"],["Lawyer","Law","academic"],["Entrepreneur","Business","business"],["Accountant","Finance","academic"],["Investment analyst","Finance","academic"],["Sales professional","Business","people"],["Musician / singer","Music","creative"],["Music producer / sound engineer","Music","technical"],["Actor / filmmaker","Film & Media","creative"],["Journalist / presenter","Media","people"],["Graphic / fashion designer","Creative","creative"],["Professional footballer","Sports","athletic"],["Basketball player","Sports","athletic"],["Athletics professional","Sports","athletic"],["Sports coach","Sports","people"],["Sports manager / agent","Sports","business"],["Soldier / military officer","Defence","discipline"],["Police officer","Public Safety","discipline"],["Pilot","Aviation","technical"],["Commercial driver / logistics specialist","Transport","technical"],["Farmer / agribusiness owner","Agriculture","business"],["Chef / hospitality manager","Hospitality","creative"],["Scientist / researcher","Research","academic"],["Public service officer","Government","people"],["Electrician / renewable energy technician","Energy","technical"],["Real estate developer","Property","business"],["Content creator / streamer","Digital Media","creative"]
+];
+const names=["Amina","Brian","Derrick","Nadia","Joel","Maya"];
+let S={cash:500000,age:18,year:2026,half:1,level:1,xp:0,rep:10,education:"Secondary school",eduStage:0,grades:55,university:false,degree:"",job:"Unemployed",salary:0,career:"Software developer",skills:{Knowledge:30,Discipline:35,Creativity:30,Leadership:25,Technical:25,Athletic:25,Social:30},friends: names.map((n,i)=>({name:n,trust:45+i*3,kind:["study partner","creative friend","sports friend","career-minded friend","neighbour","classmate"][i]})),log:[],turn:0,pta:0,sideIncome:0};
+const $=id=>document.getElementById(id);
+const money=n=>"UGX "+Math.round(n).toLocaleString("en-US");
+function note(t){S.log.unshift(t);S.log=S.log.slice(0,35);render();saveGame()}
+function xp(n){S.xp+=n;while(S.xp>=100){S.xp-=100;S.level++;S.rep+=2;S.log.unshift("You reached development level "+S.level+".")}}
+function render(){
+ $("cash").textContent=money(S.cash);$("age").textContent=S.age;$("level").textContent=S.level;$("year").textContent=S.year;
+ $("edu").textContent="Education: "+S.education;$("job").textContent="Employment: "+S.job;$("status").textContent=S.university?"Higher education":S.salary>0?"Working":"Developing";
+ $("skills").innerHTML=Object.entries(S.skills).map(([k,v])=>`<div class="split small"><span>${k}</span><b>${v}/100</b></div><div class="progress"><i style="width:${v}%"></i></div>`).join("");
+ $("goals").textContent=S.salary?`Build experience in ${S.job}, grow your reputation and consider further qualifications.`:`Develop your ${S.career} pathway, improve your grades and explore opportunities.`;
+ $("career").innerHTML=professions.map(p=>`<option ${S.career===p[0]?"selected":""}>${p[0]}</option>`).join("");
+ const c=professions.find(p=>p[0]===S.career);$("careerInfo").textContent=`Sector: ${c[1]} · Main development area: ${c[2]}. Your choices influence relevant skill growth and job options.`;
+ $("educationInfo").innerHTML=`<div class="item"><b>${S.education}</b><p class="small">Academic performance: ${S.grades}/100</p><div class="progress"><i style="width:${S.grades}%"></i></div></div><div class="item"><b>University status</b><p class="small">${S.university?S.degree+" · In progress":"Not enrolled"}</p></div><div class="item"><b>PTA meetings attended</b><p class="small">${S.pta}</p></div>`;
+ $("friends").innerHTML=S.friends.slice(0,4).map(f=>`<div class="item"><div class="split"><b>${f.name}</b><span class="tag">${f.kind}</span></div><div class="small">Friendship: ${f.trust}/100</div><div class="progress"><i style="width:${f.trust}%"></i></div></div>`).join("");
+ $("opportunities").innerHTML=`<div class="item"><b>Career ambition</b><p class="small">${S.career}</p></div><div class="item"><b>Current job market</b><p class="small">${S.age<20?"Entry-level placements and internships":"Entry-level and experienced vacancies"} · ${S.rep>=25?"Strong reputation":"Build your reputation"}</p></div><div class="item"><b>Skill opportunity</b><p class="small">Practise a skill or pursue training to unlock stronger roles.</p></div>`;
+ $("log").innerHTML=S.log.map(x=>`<p>${x}</p>`).join("")||"<p>Your story begins here.</p>";
+}
+function chooseCareer(){S.career=$("career").value;note("You set your ambition: "+S.career+". Explore training and entry routes.");}
+function study(){if(S.cash<10000){note("You cannot afford the study materials and transport this turn. Look for a free study option or earn money first.");return}S.cash-=10000;S.grades=Math.min(100,S.grades+7+Math.floor(Math.random()*5));S.skills.Knowledge=Math.min(100,S.skills.Knowledge+5);S.skills.Discipline=Math.min(100,S.skills.Discipline+3);xp(18);note("You completed a focused study period. Grades and knowledge improved. Study costs: UGX 10,000.");}
+function university(){if(S.university){note("You are already enrolled in "+S.degree+". Attend classes and complete assessments.");return}if(S.grades<65){note("Your current grades are not competitive enough. Improve your academic performance before applying.");return}const fee=80000;if(S.cash<fee){note("Application and registration costs are UGX 80,000 in this fictional simulation. You need more funds or a scholarship.");return}S.cash-=fee;S.university=true;S.degree="Diploma / degree pathway in "+(professions.find(p=>p[0]===S.career)?.[1]||"General Studies");S.education="University student";S.skills.Knowledge=Math.min(100,S.skills.Knowledge+4);xp(25);note("Your application was accepted! You enrolled in "+S.degree+". Attend classes and keep your grades up.");}
+function work(){if(S.salary>0){const raise=15000+Math.floor(Math.random()*25000);S.salary+=raise;S.rep+=2;S.skills.Leadership=Math.min(100,S.skills.Leadership+3);xp(20);note("You performed well at work and received a simulated monthly salary increase of "+money(raise)+".");return}if(S.age<16){note("You are too young for formal employment in this simulation. Focus on school and age-appropriate skill building.");return}const skill=Object.values(S.skills).reduce((a,b)=>a+b,0)/Object.keys(S.skills).length;const threshold=S.university?36: S.grades>=70?34:42;if(skill<threshold){note("Your profile needs more preparation. Build skills, improve grades or gain practical experience before applying.");return}S.job=S.career+" — junior";S.salary=90000+Math.floor(skill*2200);S.rep+=3;xp(28);note("You succeeded in a simulated entry-level interview and started work as "+S.job+". Monthly salary: "+money(S.salary)+".");}
+function sideHustle(){const earn=15000+Math.floor(Math.random()*30000);S.cash+=earn;S.skills.Technical=Math.min(100,S.skills.Technical+2);S.skills.Social=Math.min(100,S.skills.Social+2);xp(12);note("You completed a small freelance or casual project and earned "+money(earn)+". You also gained practical experience.");}
+function social(){const f=S.friends[Math.floor(Math.random()*S.friends.length)];const event=Math.random();if(event<.5){f.trust=Math.min(100,f.trust+8);S.skills.Social=Math.min(100,S.skills.Social+2);note("Group chat: "+f.name+" shared a challenge. You listened and offered useful support. Your friendship grew.");}else{f.trust=Math.max(0,f.trust-4);note("Group chat: A misunderstanding developed. You chose not to escalate it; the friendship needs a little attention.");}xp(8);}
+function sendChat(type){const f=S.friends[Math.floor(Math.random()*S.friends.length)];if(type==="support"){f.trust=Math.min(100,f.trust+10);note("You sent "+f.name+" an encouraging message. They appreciated it.");}else if(type==="network"){S.rep+=2;S.skills.Social=Math.min(100,S.skills.Social+3);note("You shared a useful opportunity in the group chat. A friend may follow up.");}else{if(S.cash<5000){note("You cannot afford the meetup this time. Suggest a free activity instead.");return}S.cash-=5000;f.trust=Math.min(100,f.trust+12);note("You organised a low-cost meetup with friends. It cost UGX 5,000 and strengthened relationships.");}xp(5);}
+function pta(){S.pta++;const roll=Math.random();if(roll<.55){S.grades=Math.min(100,S.grades+5);S.skills.Social=Math.min(100,S.skills.Social+2);note("PTA meeting: You helped discuss attendance and learning support. The school agreed on an improvement plan; grades rose.");}else{S.cash=Math.max(0,S.cash-5000);note("PTA meeting: The school raised a small activity contribution of UGX 5,000. You discussed student welfare and school priorities.");}xp(10);}
+function train(){const skills=Object.keys(S.skills);const key=skills[Math.floor(Math.random()*skills.length)];S.skills[key]=Math.min(100,S.skills[key]+5);xp(12);note("You practised "+key.toLowerCase()+". Consistent practice is building your ability.");}
+function advance(){S.turn++;S.half++;if(S.half>2){S.half=1;S.age++;}S.year+=S.half===1?0:1;
+if(S.salary>0){const pay=S.salary*6;S.cash+=pay;note("Six months passed. You received simulated wages totalling "+money(pay)+".");}
+if(S.university){S.grades=Math.min(100,S.grades+(S.grades>=70?3:1));if(S.turn%4===0){S.education="Graduate";S.university=false;S.degree=S.degree.replace("pathway","qualification");S.rep+=5;note("Graduation milestone! You completed "+S.degree+".");}}
+if(Math.random()<.45){const events=["A local employer announced internship openings.","A school club invited you to lead a community project.","A friend introduced you to someone in your chosen industry.","A new technology is changing the skills employers want.","A community sports event is looking for volunteers.","A professional in your field offered career advice."];note("World event: "+events[Math.floor(Math.random()*events.length)]);}
+if(S.age>=20&&S.education==="Secondary school"&&S.grades>=70&&Math.random()<.25){S.education="Secondary school graduate";note("You completed secondary school. University, vocational training and work pathways are now open.");}
+if(S.age>=65&&Math.random()<.1){note("You are approaching retirement age. Consider mentoring, consulting or a new chapter.");}
+xp(8);render();}
+function saveGame(){localStorage.setItem("realityWorldV3",JSON.stringify(S));}
+function resetGame(){if(!confirm("Start a new fictional life? This replaces the saved game on this device."))return;localStorage.removeItem("realityWorldV3");location.reload();}
+(function(){try{const old=localStorage.getItem("realityWorldV3");if(old){const parsed=JSON.parse(old);if(parsed&&parsed.skills&&parsed.friends)S=parsed;}}catch(e){}render();})();
+</script>
+</body>
+</html>
