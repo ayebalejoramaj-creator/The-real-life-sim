@@ -1,4 +1,3 @@
-
 const STORE_KEY = 'realityPlayer';
 
 function getPlayer() {
@@ -36,7 +35,7 @@ function nav() {
 
     <nav class="game-nav" aria-label="Main navigation">
       <a href="home.html"><span class="nav-icon">⌂</span><span>Life</span></a>
-      <a href="school.html"><span class="nav-icon">▤</span><span>Activities</span></a>
+      <a href="social.html"><span class="nav-icon">◎</span><span>Social</span></a>
       <a href="relationships.html"><span class="nav-icon">♧</span><span>People</span></a>
       <a href="news.html"><span class="nav-icon">◉</span><span>World</span></a>
       <a href="achievements.html"><span class="nav-icon">◇</span><span>Progress</span></a>
