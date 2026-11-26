@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Social · Reality</title>
+<style>
+:root{--ink:#171923;--muted:#777b89;--purple:#7565bd;--purple-light:#eeeafd;--line:#e9e7ef}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font:15px/1.45 Inter,system-ui,-apple-system,sans-serif;background:#292634}
+body:before{content:"";position:fixed;inset:0;background:linear-gradient(#17152266,#171522a8),url("https://commons.wikimedia.org/wiki/Special:FilePath/Graz_University-Library_reading-room.jpg?width=1600") center/cover no-repeat;z-index:-2}
+body:after{content:"";position:fixed;inset:0;background:#17152222;backdrop-filter:blur(1px);z-index:-1}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+.social-shell{width:min(1380px,calc(100% - 30px));margin:22px auto 100px;background:#171923f2;border:1px solid #ffffff40;border-radius:24px;box-shadow:0 24px 80px #0008;overflow:hidden;color:white}
+.social-top{height:66px;display:flex;align-items:center;gap:20px;padding:0 24px;border-bottom:1px solid #ffffff1c}
+.social-brand{font-size:23px;font-weight:900;letter-spacing:-1px;margin-right:auto}.social-brand span{color:#a99af0}
+.social-tabs{display:flex;gap:7px}.social-tabs a{padding:10px 14px;border-radius:12px;color:#cbc7d7;font-size:13px}.social-tabs a.active{background:#a99af0;color:#211d35;font-weight:800}
+.social-alert{background:#302d40;border-radius:30px;padding:8px 12px;font-size:12px}
+.layout{display:grid;grid-template-columns:245px minmax(0,1fr) 270px;gap:16px;padding:19px}
+.panel{background:#fff;color:var(--ink);border-radius:17px;overflow:hidden}
+.profile-top{padding:19px 15px;text-align:center;background:linear-gradient(145deg,#f3f0ff,#fff)}
+.avatar{width:94px;height:94px;border-radius:50%;margin:0 auto 11px;display:grid;place-items:center;background:linear-gradient(145deg,#b9adee,#6454a8);color:white;font-size:31px;font-weight:850;border:4px solid white;box-shadow:0 3px 16px #32265a30}
+.player-name{font-size:19px;font-weight:850}.handle{font-size:12px;color:var(--muted)}
+.status{display:inline-flex;align-items:center;gap:6px;background:#eeeafd;border-radius:30px;padding:7px 11px;margin-top:12px;font-size:11px;font-weight:750}
+.profile-details{padding:15px 17px}.mini-title{font-size:10px;text-transform:uppercase;letter-spacing:1.1px;color:#888493;font-weight:850;margin-bottom:8px}
+.partner{display:flex;align-items:center;gap:10px;padding:7px 0 13px}.dp{width:42px;height:42px;flex:none;border-radius:50%;display:grid;place-items:center;background:#e9e3ff;color:#5d4ca3;font-weight:850;border:2px solid white;box-shadow:0 0 0 1px #e7e1f0}
+.partner small{display:block;color:var(--muted);font-size:11px}
+.profile-note{font-size:11px;color:#777486;line-height:1.5}
+.center{min-width:0}
+.composer{padding:13px;display:flex;gap:9px;align-items:center;margin-bottom:12px}
+.composer .dp{width:39px;height:39px}
+.composer input{min-width:0;flex:1;border:0;outline:0;background:#f2f0f7;border-radius:12px;padding:12px 13px;color:var(--ink)}
+.post-btn{border:0;border-radius:11px;padding:11px 15px;background:#7565bd;color:white;font-weight:800;cursor:pointer}
+.feed-post{padding:15px 17px;margin-bottom:12px}
+.post-head{display:flex;align-items:center;gap:10px}.post-head .dp{width:39px;height:39px}
+.post-head strong{font-size:13px}.post-head small{display:block;color:var(--muted);font-size:11px}
+.post-copy{font-size:14px;margin:13px 0 12px;line-height:1.55;overflow-wrap:anywhere}
+.post-actions{display:flex;gap:18px;border-top:1px solid var(--line);padding-top:10px;color:#777287;font-size:12px}
+.post-actions button{border:0;background:none;padding:0;color:inherit;cursor:pointer}.post-actions button.liked{color:#d84f7e;font-weight:800}
+.side-card{padding:15px;margin-bottom:12px}
+.side-heading{font-weight:850;font-size:14px;margin-bottom:10px}
+.gossip{background:linear-gradient(145deg,#f3efff,#fff)}
+.gossip-item{padding:10px 0;border-top:1px solid #e7e2f2;font-size:12px;line-height:1.5}
+.gossip-item small{display:block;color:#8a8499;margin-top:3px}
+.trend{display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid var(--line);font-size:12px}.trend span:last-child{color:#8a8499}
+.social-footer{display:flex;justify-content:space-between;gap:10px;padding:0 20px 17px;color:#c7c1d7;font-size:10px}
+.social-footer a{color:#c5b6ff;text-decoration:underline}
+@media(max-width:900px){.layout{grid-template-columns:205px minmax(0,1fr)}.right{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:12px}.side-card{margin:0}}
+@media(max-width:620px){.social-shell{width:calc(100% - 14px);margin:7px auto 90px;border-radius:17px}.social-top{height:auto;min-height:58px;padding:9px 13px;gap:7px;flex-wrap:wrap}.social-brand{font-size:20px}.social-tabs{order:3;width:100%;overflow:auto}.social-tabs a{white-space:nowrap;padding:8px 10px}.layout{display:flex;flex-direction:column;padding:9px;gap:10px}.left{display:grid;grid-template-columns:1fr 1fr}.profile-top{padding:12px 7px}.avatar{width:72px;height:72px;font-size:25px}.profile-details{padding:12px 9px}.partner{gap:7px}.right{display:flex;flex-direction:column}.side-card{margin:0}.composer{padding:9px}.post-btn{padding:10px 12px}.social-footer{padding:0 12px 14px;flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div data-game-nav></div>
+<main class="social-shell">
+  <header class="social-top">
+    <a class="social-brand" href="home.html">reality<span>.</span></a>
+    <nav class="social-tabs" aria-label="Social navigation">
+      <a class="active" href="social.html">⌂ Feed</a>
+      <a href="relationships.html">♧ People</a>
+      <a href="news.html">◉ World</a>
+    </nav>
+    <div class="social-alert">◉ <span id="noticeCount">3</span></div>
+  </header>
+
+  <div class="layout">
+    <aside class="left panel">
+      <section class="profile-top">
+        <div class="avatar" id="myAvatar">Y</div>
+        <div class="player-name" id="myName">You</div>
+        <div class="handle" id="myHandle">@newstudent</div>
+        <div class="status" id="relationshipStatus">● Single</div>
+      </section>
+      <section class="profile-details">
+        <div class="mini-title">Your relationship</div>
+        <div id="partnerArea" class="profile-note">No significant other yet. Your story is still unfolding.</div>
+        <div class="mini-title" style="margin-top:13px">Your school circle</div>
+        <div class="profile-note" id="connectionCount">No connections yet. Meet people around your world.</div>
+      </section>
+    </aside>
+
+    <section class="center">
+      <form class="composer panel" id="postForm">
+        <div class="dp" id="composerAvatar">Y</div>
+        <input id="postInput" maxlength="220" placeholder="What's happening in your world?" aria-label="Write a post">
+        <button class="post-btn" type="submit">Post</button>
+      </form>
+      <div id="feed">
+        <article class="feed-post panel">
+          <div class="post-head"><div class="dp">A</div><div><strong>Amina N.</strong><small>2 hours ago · Campus</small></div></div>
+          <div class="post-copy">First week back and the library is already my second home 📚</div>
+          <div class="post-actions"><button type="button" class="like">♡ 18</button><span>◯ 4 comments</span><span>↗ Share</span></div>
+        </article>
+        <article class="feed-post panel">
+          <div class="post-head"><div class="dp">D</div><div><strong>Daniel K.</strong><small>3 hours ago · Friends</small></div></div>
+          <div class="post-copy">Anyone joining the debate club try-outs on Friday?</div>
+          <div class="post-actions"><button type="button" class="like">♡ 12</button><span>◯ 6 comments</span><span>↗ Share</span></div>
+        </article>
+        <article class="feed-post panel">
+          <div class="post-head"><div class="dp">J</div><div><strong>Joan A.</strong><small>Yesterday · Activities</small></div></div>
+          <div class="post-copy">Training paid off. Made the school team! ⚽</div>
+          <div class="post-actions"><button type="button" class="like">♡ 31</button><span>◯ 9 comments</span><span>↗ Share</span></div>
+        </article>
+      </div>
+    </section>
+
+    <aside class="right">
+      <section class="side-card panel gossip">
+        <div class="side-heading">📣 Scholarship gossip</div>
+        <div class="gossip-item">Word is the top performers could be nominated for full scholarships this year 👀<small>Campus whisper · 2h ago</small></div>
+        <div class="gossip-item">The science club may be partnering with an international university.<small>Heard around school · 4h ago</small></div>
+        <div class="gossip-item">A new creative arts bursary is rumoured to be announced soon.<small>Student circle · Yesterday</small></div>
+      </section>
+      <section class="side-card panel">
+        <div class="side-heading">🔥 Trending at school</div>
+        <div class="trend"><span>#SchoolLife</span><span>12.4K</span></div>
+        <div class="trend"><span>#BestFriends</span><span>8.7K</span></div>
+        <div class="trend"><span>#TalentShow</span><span>6.1K</span></div>
+        <div class="trend"><span>#StudyGoals</span><span>5.3K</span></div>
+      </section>
+    </aside>
+  </div>
+
+  <footer class="social-footer">
+    <span>Dream bigger. Live your story.</span>
+    <span>Library setting: Graz University Library · <a href="https://commons.wikimedia.org/wiki/File:Graz_University-Library_reading-room.jpg" target="_blank" rel="noopener">Photo credit & licence</a></span>
+  </footer>
+</main>
+
+<script src="assets/game.js"></script>
+<script>
+(function () {
+  const player = JSON.parse(localStorage.getItem('realityPlayer') || '{}');
+  const name = player.name || 'You';
+  const initial = (name.trim()[0] || 'Y').toUpperCase();
+
+  document.getElementById('myName').textContent = name;
+  document.getElementById('myHandle').textContent =
+    '@' + name.toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 18);
+  document.getElementById('myAvatar').textContent = initial;
+  document.getElementById('composerAvatar').textContent = initial;
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[character]));
+  }
+
+  // The relationship card reads the optional relationship record if one exists.
+  // The existing People page does not yet create romantic relationships.
+  let relationship = null;
+  try {
+    relationship = JSON.parse(localStorage.getItem('realityRelationship') || 'null');
+  } catch (_) {}
+
+  if (relationship && relationship.name) {
+    document.getElementById('relationshipStatus').textContent = '♥ In a relationship';
+    document.getElementById('partnerArea').innerHTML =
+      '<div class="partner"><div class="dp">' +
+      escapeHtml((relationship.name.trim()[0] || '♥').toUpperCase()) +
+      '</div><div><strong>' + escapeHtml(relationship.name) +
+      '</strong><small>' + escapeHtml(relationship.duration || 'Together') +
+      '</small></div></div>';
+  }
+
+  let connections = [];
+  try { connections = JSON.parse(localStorage.getItem('realityConnections') || '[]'); }
+  catch (_) {}
+  document.getElementById('connectionCount').textContent =
+    connections.length ? connections.length + ' people in your circle' :
+    'No connections yet. Meet people around your world.';
+
+  const form = document.getElementById('postForm');
+  const input = document.getElementById('postInput');
+  const feed = document.getElementById('feed');
+
+  function addPost(postText, date, save) {
+    const article = document.createElement('article');
+    article.className = 'feed-post panel';
+    article.innerHTML =
+      '<div class="post-head"><div class="dp">' + escapeHtml(initial) +
+      '</div><div><strong>' + escapeHtml(name) +
+      '</strong><small>' + escapeHtml(date) + ' · Your feed</small></div></div>' +
+      '<div class="post-copy"></div>' +
+      '<div class="post-actions"><button type="button" class="like">♡ 0</button>' +
+      '<span>◯ Comments</span><span>↗ Share</span></div>';
+    article.querySelector('.post-copy').textContent = postText;
+    article.querySelector('.like').addEventListener('click', event => {
+      const button = event.currentTarget;
+      button.classList.toggle('liked');
+      button.textContent = button.classList.contains('liked') ? '♥ 1' : '♡ 0';
+    });
+    feed.prepend(article);
+
+    if (save) {
+      let posts = [];
+      try { posts = JSON.parse(localStorage.getItem('realitySocialPosts') || '[]'); }
+      catch (_) {}
+      posts.unshift({ text: postText, date });
+      localStorage.setItem('realitySocialPosts', JSON.stringify(posts.slice(0, 30)));
+    }
+  }
+
+  let savedPosts = [];
+  try { savedPosts = JSON.parse(localStorage.getItem('realitySocialPosts') || '[]'); }
+  catch (_) {}
+  savedPosts.slice().reverse().forEach(post => addPost(post.text, post.date, false));
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const value = input.value.trim();
+    if (!value) return;
+    addPost(value, 'Just now', true);
+    input.value = '';
+  });
+
+  feed.querySelectorAll('.like').forEach(button => {
+    button.addEventListener('click', () => {
+      button.classList.toggle('liked');
+      const liked = button.classList.contains('liked');
+      button.textContent = liked ? '♥ Liked' : '♡ Like';
+    });
+  });
+})();
+</script>
+</body>
+</html>
