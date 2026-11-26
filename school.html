@@ -1,18 +1,171 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>School & Employment · Reality</title><link rel="stylesheet" href="assets/game.css"></head><body><div data-game-nav></div><main class="wrap"><div class="eyebrow">Growth and opportunity</div><h1>School, work & tasks</h1><p>Build qualifications, explore careers and make progress through practical activities.</p>
-<section class="grid">
-<div class="card"><h2>Education paths</h2><div class="list">
-<div class="item"><strong>Secondary school</strong><small>Build core knowledge and qualifications.</small><button onclick="completeTask('Completed a study session')">Study session</button></div>
-<div class="item"><strong>University</strong><small>Explore degrees in technology, business, health, engineering, arts and more.</small><button onclick="completeTask('Researched university options')">Research options</button></div>
-<div class="item"><strong>Professional training</strong><small>Short courses, apprenticeships and certificates.</small><button onclick="completeTask('Completed a skills lesson')">Skills lesson</button></div></div></div>
-<div class="card"><h2>Employment board</h2><div class="list">
-<div class="item"><strong>Retail assistant</strong><small>Customer service · Entry level</small><button onclick="applyJob('Retail assistant')">Apply</button></div>
-<div class="item"><strong>Junior digital assistant</strong><small>Technology · Entry level</small><button onclick="applyJob('Junior digital assistant')">Apply</button></div>
-<div class="item"><strong>Farm operations trainee</strong><small>Agriculture · Entry level</small><button onclick="applyJob('Farm operations trainee')">Apply</button></div>
-<div class="item"><strong>Sports academy trainee</strong><small>Sports · Development</small><button onclick="applyJob('Sports academy trainee')">Apply</button></div></div></div>
-</section><h2 style="margin-top:22px">Tasks & progress</h2><div class="card"><div id="taskList" class="list"><div class="item">Your tasks will appear here.</div></div></div>
-</main><script src="assets/game.js"></script><script>
-function tasks(){return JSON.parse(localStorage.getItem('realityTasks')||'[]')}
-function renderTasks(){let a=tasks();document.getElementById('taskList').innerHTML=a.length?a.map(t=>'<div class="item"><strong>'+t.text+'</strong><small>'+t.date+'</small></div>').join(''):'<div class="item">No completed tasks yet. Choose an activity above.</div>'}
-function completeTask(t){let a=tasks();a.unshift({text:t,date:new Date().toLocaleString()});localStorage.setItem('realityTasks',JSON.stringify(a));renderTasks()}
-function applyJob(j){localStorage.setItem('realityJobApplication',j);completeTask('Applied for '+j);alert('Application submitted in the game: '+j)}
-renderTasks();</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>School Life · Reality</title>
+<style>
+:root{--ink:#24242a;--muted:#77777e;--paper:#f4f0e7;--paper2:#e8e1d4;--line:#d6cdbd;--orange:#d66b3f;--blue:#526a83;--green:#66806b}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif}
+body{min-height:100vh;overflow-x:hidden;color:#fff;background:#252b32}
+body:before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(90deg,#10151b66,#10151b22 50%,#10151b55),url("https://commons.wikimedia.org/wiki/Special:FilePath/Graz_University-Library_reading-room.jpg?width=2200") center/cover no-repeat}
+body:after{content:"";position:fixed;inset:0;z-index:-1;background:#11192318;pointer-events:none}
+a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}
+.brand{position:fixed;top:18px;left:24px;font-weight:900;letter-spacing:2px;font-size:19px;text-shadow:0 2px 10px #0008;z-index:3}.brand small{display:block;font-size:9px;letter-spacing:1px;font-weight:600;margin-top:3px}
+.top-right{position:fixed;right:22px;top:18px;z-index:3;background:#17202ac9;border:1px solid #ffffff44;padding:9px 13px;border-radius:9px;font-size:12px;text-align:right;backdrop-filter:blur(8px)}
+.top-right strong{display:block;font-size:14px}
+.scene{min-height:100vh;display:grid;place-items:center;padding:82px 16px 86px}
+.report{width:min(760px,94vw);min-height:480px;background:var(--paper);color:var(--ink);border:1px solid #fff9;border-radius:8px;box-shadow:0 22px 65px #0008;position:relative;transform:rotate(-.35deg);overflow:hidden}
+.report:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.22;background:repeating-linear-gradient(0deg,transparent 0 30px,#b7ac9a18 31px)}
+.report-head{position:relative;padding:22px 27px 15px;border-bottom:2px solid #39383a;display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.kicker{font-size:10px;font-weight:900;letter-spacing:2px;color:var(--orange);text-transform:uppercase}
+h1{font-family:Georgia,serif;font-size:clamp(27px,5vw,39px);font-weight:700;line-height:1;margin:5px 0 6px}
+.subline{font-size:12px;color:#6c6a68}
+.stamp{border:2px solid var(--orange);color:var(--orange);font-size:10px;font-weight:900;letter-spacing:1px;padding:8px 10px;transform:rotate(5deg);white-space:nowrap}
+.student-line{display:flex;gap:22px;flex-wrap:wrap;padding:12px 27px;border-bottom:1px solid var(--line);font-size:11px;color:#65615b}
+.student-line b{color:#29282b;font-size:12px;margin-left:4px}
+.main-content{position:relative;padding:23px 27px 15px;min-height:265px}
+.section-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.section-count{font-size:10px;font-weight:900;letter-spacing:1.5px;color:#8a8174}
+.section-title{font-family:Georgia,serif;font-size:25px;font-weight:700;margin:0 0 7px}
+.section-intro{font-size:13px;line-height:1.55;color:#66615b;max-width:590px;margin:0 0 17px}
+.grade-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
+.grade-row strong{display:block;font-size:13px}.grade-row small{display:block;font-size:11px;color:#817b73;margin-top:3px}
+.grade{font-family:Georgia,serif;font-weight:800;font-size:20px;color:var(--blue);min-width:42px;text-align:right}
+.note{background:#e9e1d3;border-left:4px solid var(--orange);padding:12px 14px;font-size:12px;line-height:1.5;color:#514b43;margin-top:12px}
+.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.action{border:0;border-radius:4px;background:#353a40;color:#fff;padding:9px 13px;font-size:11px;font-weight:800}
+.action.secondary{background:#d9d0c1;color:#37332d}
+.report-foot{position:relative;border-top:1px solid var(--line);padding:13px 27px 17px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.swipe-hint{font-size:10px;color:#777168;letter-spacing:.3px}
+.cursor-track{display:flex;align-items:center;gap:6px;touch-action:pan-y;user-select:none}
+.cursor-arrow{border:0;background:transparent;color:#34343a;font-size:23px;padding:2px 7px;line-height:1}
+.cursor-dots{display:flex;gap:6px;align-items:center;padding:6px 2px;cursor:grab}
+.cursor-dots:active{cursor:grabbing}
+.dot{width:8px;height:8px;border-radius:50%;background:#c5bdae;border:0;padding:0}
+.dot.active{width:24px;border-radius:8px;background:var(--orange)}
+.nav-caption{font-size:10px;font-weight:800;color:#55504a;min-width:112px;text-align:center}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:center;gap:8px;padding:10px 12px max(10px,env(safe-area-inset-bottom));background:linear-gradient(transparent,#111923a8);z-index:3}
+.bottom-nav a{background:#18212bd9;border:1px solid #ffffff40;border-radius:22px;padding:8px 13px;font-size:11px;backdrop-filter:blur(8px)}
+.bottom-nav a.active{background:#f0e9db;color:#292a2e;border-color:#fff;font-weight:900}
+.toast{position:fixed;left:50%;bottom:78px;transform:translateX(-50%);background:#202a34;color:#fff;padding:10px 15px;border-radius:6px;font-size:12px;box-shadow:0 5px 20px #0006;opacity:0;pointer-events:none;transition:opacity .2s;z-index:5}
+.toast.show{opacity:1}
+@media(max-width:600px){
+ .brand{top:10px;left:13px;font-size:16px}.top-right{top:8px;right:10px;padding:7px 9px;font-size:10px}
+ .scene{padding:68px 9px 77px;align-items:center}
+ .report{width:100%;min-height:0;transform:none;border-radius:7px}
+ .report-head{padding:16px 16px 12px}.stamp{font-size:8px;padding:6px 7px}
+ .student-line{padding:10px 16px;gap:8px 15px;font-size:10px}
+ .main-content{padding:17px 16px 13px;min-height:275px}
+ .section-title{font-size:22px}.section-intro{font-size:12px}
+ .report-foot{padding:10px 13px 13px}.swipe-hint{max-width:120px;line-height:1.4}
+ .nav-caption{min-width:88px;font-size:9px}
+ .bottom-nav{gap:5px}.bottom-nav a{padding:7px 10px;font-size:10px}
+}
+</style>
+</head>
+<body>
+<a class="brand" href="home.html">REALITY<small>YOUR SCHOOL YEARS</small></a>
+<div class="top-right"><strong id="yearAge">Year 1 · Age 5</strong><span id="schoolName">Your school story</span></div>
+<main class="scene">
+<article class="report" aria-label="School life report card">
+  <header class="report-head">
+    <div><div class="kicker">The school yearbook</div><h1>My School Life</h1><div class="subline">A little record of everything happening this year.</div></div>
+    <div class="stamp">STUDENT<br>RECORD</div>
+  </header>
+  <div class="student-line"><span>STUDENT<b id="studentName">You</b></span><span>YEAR<b id="studentYear">01</b></span><span>AGE<b id="studentAge">05</b></span><span>TERM<b id="studentTerm">01</b></span></div>
+  <section class="main-content" id="sectionContent" aria-live="polite"></section>
+  <footer class="report-foot">
+    <div class="swipe-hint">Swipe the cursor to explore your school life</div>
+    <div class="cursor-track" id="cursorTrack">
+      <button class="cursor-arrow" id="prev" aria-label="Previous section">‹</button>
+      <div class="cursor-dots" id="cursorDots" aria-label="School sections"></div>
+      <button class="cursor-arrow" id="next" aria-label="Next section">›</button>
+    </div>
+    <div class="nav-caption" id="navCaption">Academics</div>
+  </footer>
+</article>
+</main>
+<nav class="bottom-nav" aria-label="Places">
+ <a href="home.html">Life</a><a href="social.html">Social</a><a class="active" href="school.html">School</a><a href="relationships.html">People</a>
+</nav>
+<div class="toast" id="toast" role="status"></div>
+<script>
+(() => {
+ 'use strict';
+ const read=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch{return d}};
+ const write=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+ const player=read('realityPlayer',{});
+ const school=read('realitySchoolState',{});
+ const stats=read('realitySchoolStats',{academics:72,attendance:96,creativity:54,fitness:60,confidence:55});
+ const name=player.name||'You', age=Number(player.age??school.age??5), year=Number(school.year||1), term=Number(school.term||1);
+ document.getElementById('yearAge').textContent=`Year ${year} · Age ${age}`;
+ document.getElementById('schoolName').textContent=school.name||school.type||'Your school story';
+ document.getElementById('studentName').textContent=name;
+ document.getElementById('studentYear').textContent=String(year).padStart(2,'0');
+ document.getElementById('studentAge').textContent=String(age).padStart(2,'0');
+ document.getElementById('studentTerm').textContent=String(term).padStart(2,'0');
+ const tasks=read('realityTasks',[]);
+ const connections=read('realityConnections',[]);
+ const sections=[
+  {name:'Academics',tag:'01 · THE CLASSROOM',title:'How are the lessons going?',intro:'Your progress in class, the things you are learning and the subjects that are beginning to stand out.',body:()=>`
+   <div class="grade-row"><div><strong>Overall class performance</strong><small>Current academic standing</small></div><div class="grade">${Math.round(stats.academics??72)}%</div></div>
+   <div class="grade-row"><div><strong>Attendance</strong><small>Showing up and keeping on track</small></div><div class="grade">${Math.round(stats.attendance??96)}%</div></div>
+   <div class="note">Teacher's note: Every school year is a chance to discover what you are good at. Your path is still wide open.</div>
+   <div class="action-row"><button class="action" data-action="study">Study a little</button><button class="action secondary" data-action="teacher">Check in with a teacher</button></div>`},
+  {name:'Social Life',tag:'02 · THE PEOPLE',title:'Your world between lessons',intro:'Friendships, classmates, little dramas and the people who make school memorable.',body:()=>`
+   <div class="grade-row"><div><strong>People you've connected with</strong><small>Classmates and school friends</small></div><div class="grade">${connections.length}</div></div>
+   <div class="grade-row"><div><strong>Social confidence</strong><small>How comfortable you feel around others</small></div><div class="grade">${Math.round(stats.confidence??55)}%</div></div>
+   <div class="note">There is more to school than grades. Small moments can turn into lifelong friendships — or stories you never forget.</div>
+   <div class="action-row"><a class="action" href="social.html">Open school feed</a><a class="action secondary" href="relationships.html">Meet people</a></div>`},
+  {name:'Activities',tag:'03 · AFTER THE BELL',title:'What do you do beyond class?',intro:'Sports, clubs, competitions, creative projects and the things you choose to spend your time doing.',body:()=>`
+   <div class="grade-row"><div><strong>Creative development</strong><small>Arts, music, clubs and personal projects</small></div><div class="grade">${Math.round(stats.creativity??54)}%</div></div>
+   <div class="grade-row"><div><strong>Physical activity</strong><small>Sport, movement and school teams</small></div><div class="grade">${Math.round(stats.fitness??60)}%</div></div>
+   <div class="note">You don't have to be good at something before you try it. This is where interests become talents.</div>
+   <div class="action-row"><button class="action" data-action="club">Explore a club</button><button class="action secondary" data-action="sport">Join an activity</button></div>`},
+  {name:'Personal Development',tag:'04 · GROWING UP',title:'The person you're becoming',intro:'Confidence, independence, resilience and the small decisions that shape who you are.',body:()=>`
+   <div class="grade-row"><div><strong>Confidence</strong><small>Belief in yourself</small></div><div class="grade">${Math.round(stats.confidence??55)}%</div></div>
+   <div class="grade-row"><div><strong>Experiences collected</strong><small>Completed school activities</small></div><div class="grade">${tasks.length}</div></div>
+   <div class="note">There is no single correct way to grow up. Your choices, friendships and experiences will shape your own story.</div>
+   <div class="action-row"><button class="action" data-action="challenge">Try something new</button><button class="action secondary" data-action="reflect">Take a moment to reflect</button></div>`},
+  {name:'School Record',tag:'05 · THE BIG PICTURE',title:'Your year so far',intro:'A keepsake of your milestones, completed tasks and the moments that make this school year yours.',body:()=>`
+   <div class="grade-row"><div><strong>Completed activities</strong><small>Things you've taken part in</small></div><div class="grade">${tasks.length}</div></div>
+   <div class="grade-row"><div><strong>School connections</strong><small>People in your growing circle</small></div><div class="grade">${connections.length}</div></div>
+   <div class="note">${tasks.length?`Latest milestone: ${String(tasks[0].text||'A new experience').replace(/[<>]/g,'')}`:'Your record is waiting for its first memory. Go out and make one.'}</div>
+   <div class="action-row"><button class="action" data-action="memory">Add a school memory</button></div>`}
+ ];
+ let current=0;
+ const content=document.getElementById('sectionContent'), dots=document.getElementById('cursorDots'), caption=document.getElementById('navCaption');
+ function toast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove('show'),1800)}
+ function render(){
+  const s=sections[current];caption.textContent=s.name;
+  content.innerHTML=`<div class="section-meta"><span class="section-count">${s.tag}</span><span class="section-count">${current+1} / ${sections.length}</span></div><h2 class="section-title">${s.title}</h2><p class="section-intro">${s.intro}</p>${s.body()}`;
+  [...dots.children].forEach((d,i)=>{d.classList.toggle('active',i===current);d.setAttribute('aria-current',i===current?'step':'false')});
+ }
+ sections.forEach((s,i)=>{const b=document.createElement('button');b.className='dot';b.setAttribute('aria-label',s.name);b.addEventListener('click',()=>go(i));dots.appendChild(b)});
+ function go(i){current=(i+sections.length)%sections.length;render()}
+ document.getElementById('prev').addEventListener('click',()=>go(current-1));
+ document.getElementById('next').addEventListener('click',()=>go(current+1));
+ let startX=null;
+ const track=document.getElementById('cursorTrack');
+ track.addEventListener('touchstart',e=>{startX=e.touches[0].clientX},{passive:true});
+ track.addEventListener('touchend',e=>{if(startX===null)return;const dx=e.changedTouches[0].clientX-startX;if(Math.abs(dx)>22)go(current+(dx<0?1:-1));startX=null},{passive:true});
+ let mouseX=null;
+ track.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse')mouseX=e.clientX});
+ track.addEventListener('pointerup',e=>{if(mouseX===null)return;const dx=e.clientX-mouseX;if(Math.abs(dx)>28)go(current+(dx<0?1:-1));mouseX=null});
+ content.addEventListener('click',e=>{
+  const button=e.target.closest('[data-action]');if(!button)return;
+  const action=button.dataset.action;
+  const messages={study:'You spent time studying. Your academic progress is improving.',teacher:'You checked in with a teacher. A little guidance can go a long way.',club:'You explored a school club. A new interest might be waiting.',sport:'You took part in a physical activity.',challenge:'You stepped outside your comfort zone.',reflect:'You took a moment to think about your school year.',memory:'A school memory has been added to your record.'};
+  const key='realityTasks';const list=read(key,[]);list.unshift({text:messages[action],date:new Date().toLocaleDateString(),type:'school'});write(key,list.slice(0,100));
+  if(action==='study')stats.academics=Math.min(100,(stats.academics||72)+2);
+  if(action==='challenge')stats.confidence=Math.min(100,(stats.confidence||55)+2);
+  write('realitySchoolStats',stats);
+  if(window.RealityAgents&&action==='study')window.RealityAgents.interact('mika','shared_interest','The player studied at school.');
+  toast(messages[action]||'Added to your school record.');render();
+ });
+ render();
+})();
+</script>
+</body>
+</html>
