@@ -109,6 +109,7 @@
     // NPCs remember the player's social action; future relationship/event systems can react to it.
     agents.forEach(a => { if (a.traits.includes('outgoing') || a.traits.includes('curious')) remember(a, `${name} posted: ${text}`); });
     persistAgent();
+    if (window.RealityAgents) window.RealityAgents.recordPlayerPost(text, name);
   });
   simulateAgents(); renderProfile(); renderFeed(); renderGossip(); renderConnections();
 })();
