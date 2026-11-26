@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#11131b"><title>Reality — Character Creator</title>
+<style>
+:root{--bg:#11131b;--panel:#1c202c;--panel2:#252b39;--line:#41495b;--gold:#e8bd63;--text:#f5f2eb;--muted:#aeb6c5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 0,#313344,#11131b 58%);color:var(--text);font:14px/1.45 system-ui,Segoe UI,sans-serif}
+button,input,select{font:inherit}button{border:1px solid var(--line);background:#2a3040;color:var(--text);border-radius:9px;padding:9px 12px;cursor:pointer}button.active{border-color:var(--gold);color:#ffe0a0;background:#393342}button:hover{border-color:var(--gold)}
+header{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #ffffff18;background:#10121bd9}.brand{font-weight:900;letter-spacing:.17em;color:var(--gold)}.header-right{color:var(--muted);font-size:11px;letter-spacing:.12em}
+main{max-width:1400px;margin:auto;padding:15px;display:grid;grid-template-columns:300px minmax(300px,1fr) 300px;gap:13px;min-height:calc(100vh - 58px)}
+.panel{background:linear-gradient(160deg,#222735f2,#181c27f5);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 16px 38px #0004}
+h1{font-size:21px;margin:0 0 4px}h2{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#e6d2a6;margin:15px 0 9px}.sub{font-size:12px;color:var(--muted);margin:0 0 12px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}.tabs button{flex:1;min-width:75px;font-size:12px}.gender{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:12px 0}
+.field{margin:12px 0}.field label{display:flex;justify-content:space-between;font-size:12px;color:#c6ccda;margin-bottom:6px}.field output{color:var(--gold)}input[type=range]{width:100%;accent-color:var(--gold)}select{width:100%;background:#151a25;color:white;border:1px solid var(--line);padding:9px;border-radius:8px}
+.swatches{display:flex;gap:7px;flex-wrap:wrap}.swatch{width:27px;height:27px;padding:0;border-radius:50%;border:2px solid #ffffff55}.swatch.active{outline:2px solid var(--gold);outline-offset:2px}
+.viewport{position:relative;min-height:680px;padding:0;overflow:hidden;background:radial-gradient(ellipse at 50% 35%,#7e7d87 0,#4c5260 38%,#252c3a 76%,#171c28 100%)}#stage{position:absolute;inset:0;width:100%;height:100%;display:block}.view-top{position:absolute;top:13px;left:14px;right:14px;display:flex;justify-content:space-between;pointer-events:none}.view-tag{font-size:10px;letter-spacing:.16em;background:#111723b8;border:1px solid #ffffff30;padding:7px 10px;border-radius:99px}.view-controls{position:absolute;right:14px;bottom:15px;display:flex;gap:6px}.view-controls button{background:#141a26cf}.view-bottom{position:absolute;left:14px;bottom:16px;font-size:11px;color:#e5e8ed;text-shadow:0 2px 4px #000}
+.preset-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.preset{padding:4px;font-size:10px}.preset .head{height:46px;border-radius:6px;margin-bottom:4px;background:linear-gradient(145deg,#d8b39c,#6e4c45)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.primary{background:linear-gradient(120deg,#f5d487,#d5a746);color:#211b13;border:0;font-weight:800;padding:12px 18px}.hint{font-size:11px;color:var(--muted);margin-top:10px}.parentcards{display:grid;grid-template-columns:1fr 1fr;gap:8px}.parentcard{padding:9px;text-align:center;background:#151a25;border:1px solid var(--line);border-radius:10px}.parentcard .mini{height:62px;width:46px;margin:0 auto 6px;border-radius:40% 40% 32% 32%;background:linear-gradient(#b27f64 0 45%,#6e7480 45%);border:2px solid #b9a7a1}.parentcard strong{display:block;font-size:11px}.parentcard small{color:var(--muted);font-size:10px}
+.footer{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--muted);font-size:11px}
+@media(max-width:1000px){main{grid-template-columns:260px minmax(280px,1fr)}.right{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:10px}.right>div{min-width:0}.viewport{min-height:650px}}
+@media(max-width:650px){header{padding:0 12px}.header-right{display:none}main{display:flex;flex-direction:column;padding:10px}.viewport{order:-1;min-height:65vh;height:65vh;max-height:720px}.panel{padding:12px}.right{display:block}.footer{display:block}.footer button{margin-top:10px;width:100%}}
+</style>
+</head><body>
+<header><div class="brand">REALITY / PRO CREATOR</div><div class="header-right">PLAYER CAREER · CHARACTER STUDIO</div></header>
+<main>
+<section class="panel left">
+<h1>Build your player</h1><p class="sub">A live 3D character creator. Drag to rotate · pinch or scroll to zoom.</p>
+<div class="gender"><button id="female" class="active" onclick="setGender('female')">♀ Female</button><button id="male" onclick="setGender('male')">♂ Male</button></div>
+<h2>Preset</h2><div class="preset-grid" id="presets"></div>
+<h2>Appearance</h2>
+<div class="field"><label>Skin tone</label><div class="swatches" id="skinSwatches"></div></div>
+<div class="field"><label>Hair style</label><select id="hairStyle"><option value="short">Short</option><option value="curly">Curly</option><option value="long">Long</option><option value="fade">Fade</option><option value="braids">Braids</option><option value="bun">Tied back / bun</option></select></div>
+<div class="field"><label>Hair colour</label><div class="swatches" id="hairSwatches"></div></div>
+<div class="field"><label>Face shape <output id="faceOut">50</output></label><input id="faceShape" type="range" min="0" max="100" value="50"></div>
+<div class="field"><label>Height <output id="heightOut">50</output></label><input id="height" type="range" min="0" max="100" value="50"></div>
+<div class="field"><label>Build <output id="buildOut">50</output></label><input id="build" type="range" min="0" max="100" value="50"></div>
+</section>
+<section class="viewport panel" id="viewport">
+<canvas id="stage"></canvas><div class="view-top"><span class="view-tag">LIVE 3D PREVIEW</span><span class="view-tag" id="genderTag">FEMALE PLAYER</span></div>
+<div class="view-bottom">STUDIO LIGHTING · SHADOWS · FULL BODY</div><div class="view-controls"><button onclick="resetCamera()">Reset view</button><button onclick="zoom(1.15)">+</button><button onclick="zoom(.87)">−</button></div>
+</section>
+<section class="panel right">
+<h2>Outfit</h2><p class="sub">Comfortable, modest starter clothing.</p>
+<div class="field"><label>Style</label><select id="outfit"><option value="hoodie">Relaxed hoodie</option><option value="shirt">Loose shirt</option><option value="polo">Casual polo</option><option value="tracksuit">Track jacket</option><option value="kit">Training kit</option></select></div>
+<div class="field"><label>Outfit colour</label><div class="swatches" id="outfitSwatches"></div></div>
+<div class="field"><label>Footwear</label><select id="shoes"><option>Everyday trainers</option><option>Football boots</option><option>Casual shoes</option></select></div>
+<h2>Family avatars</h2><p class="sub">Optional mature parent avatars. We can add family histories later.</p>
+<div class="parentcards"><div class="parentcard"><div class="mini"></div><strong>Father</strong><small>Mature adult avatar</small><div class="field"><label>Age <output id="fatherAgeOut">48</output></label><input id="fatherAge" type="range" min="38" max="75" value="48"></div></div><div class="parentcard"><div class="mini" style="background:linear-gradient(#bd8c75 0 45%,#806d87 45%)"></div><strong>Mother</strong><small>Mature adult avatar</small><div class="field"><label>Age <output id="motherAgeOut">45</output></label><input id="motherAge" type="range" min="36" max="72" value="45"></div></div></div>
+<div class="field"><label>Character name</label><input id="playerName" value="Alex" maxlength="24" style="width:100%;padding:9px;background:#151a25;color:white;border:1px solid var(--line);border-radius:8px"></div>
+<div class="field"><label>Starting location</label><select id="location"><option>Kampala, Uganda</option><option>Entebbe, Uganda</option><option>Jinja, Uganda</option><option>Mbarara, Uganda</option><option>Nairobi, Kenya</option><option>London, United Kingdom</option></select></div>
+<div class="actions"><button class="primary" onclick="confirmCharacter()">Confirm player</button></div><p class="hint" id="status">Your customisation is local to this browser prototype.</p>
+</section>
+<div class="footer"><span>Prototype: procedural 3D model, not a scanned or rigged photorealistic human asset. More detailed model assets can be added in a later build.</span><button onclick="resetAll()">Reset character</button></div>
+</main>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+const $=id=>document.getElementById(id);
+let gender='female', preset=0, cameraDist=6.4, dragging=false, prev={x:0,y:0}, rotY=0, rotX=0;
+let scene,camera,renderer,root,avatar={}, skin='#a96f54',hair='#211817',cloth='#d1a66a';
+const skinSet=['#f0c8a7','#dba17e','#b97959','#925b43','#684438','#402a25'];
+const hairSet=['#171316','#3a251d','#65452f','#a87542','#d5b87e','#874e5a'];
+const clothSet=['#d1a66a','#587b9a','#507c69','#8a638e','#b6b5b2','#333b4a'];
+function mat(color,rough=.72){return new THREE.MeshStandardMaterial({color,roughness:rough,metalness:.02});}
+function mesh(geo,material,parent= root){let m=new THREE.Mesh(geo,material);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
+function sphere(parent,x,y,z,sx,sy,sz,material){let m=mesh(new THREE.SphereGeometry(1,32,24),material,parent);m.position.set(x,y,z);m.scale.set(sx,sy,sz);return m;}
+function cylinder(parent,x1,y1,z1,x2,y2,z2,r1,r2,material){let a=new THREE.Vector3(x1,y1,z1),b=new THREE.Vector3(x2,y2,z2),d=b.clone().sub(a);let m=mesh(new THREE.CylinderGeometry(r2,r1,d.length(),20),material,parent);m.position.copy(a.add(b).multiplyScalar(.5));m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());return m;}
+function limb(parent,a,b,rA,rB,material){return cylinder(parent,...a,...b,rA,rB,material);}
+function init(){
+ scene=new THREE.Scene();scene.background=new THREE.Color('#444956');scene.fog=new THREE.Fog('#444956',10,22);
+ camera=new THREE.PerspectiveCamera(34,1,.1,100);camera.position.set(0,2.55,cameraDist);
+ renderer=new THREE.WebGLRenderer({canvas:$('stage'),antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;
+ scene.add(new THREE.HemisphereLight(0xe6e7ff,0x35313a,2.0));
+ let key=new THREE.DirectionalLight(0xffe2c3,3.2);key.position.set(-3.5,7,5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);key.shadow.camera.left=-4;key.shadow.camera.right=4;key.shadow.camera.top=6;key.shadow.camera.bottom=-4;scene.add(key);
+ let fill=new THREE.DirectionalLight(0xc6d8ff,1.2);fill.position.set(4,3,-4);scene.add(fill);
+ let rim=new THREE.PointLight(0xffd6b2,24,10);rim.position.set(1,4,-2);scene.add(rim);
+ let floor=mesh(new THREE.CircleGeometry(4,64),mat('#303542'));floor.rotation.x=-Math.PI/2;floor.position.y=-.03;floor.receiveShadow=true;
+ let disk=mesh(new THREE.CylinderGeometry(1.25,1.35,.12,64),mat('#626574',.48));disk.position.y=.03;disk.receiveShadow=true;
+ root=new THREE.Group();scene.add(root);buildAvatar();resize();window.addEventListener('resize',resize);
+ const canvas=$('stage');canvas.addEventListener('pointerdown',e=>{dragging=true;prev={x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId)});
+ canvas.addEventListener('pointermove',e=>{if(!dragging)return;rotY+=(e.clientX-prev.x)*.009;rotX=Math.max(-.25,Math.min(.35,rotX+(e.clientY-prev.y)*.004));prev={x:e.clientX,y:e.clientY};root.rotation.y=rotY;root.rotation.x=rotX;});
+ canvas.addEventListener('pointerup',()=>dragging=false);canvas.addEventListener('pointercancel',()=>dragging=false);
+ canvas.addEventListener('wheel',e=>{e.preventDefault();cameraDist=Math.max(4.2,Math.min(9,cameraDist+e.deltaY*.004));updateCamera()},{passive:false});
+ animate();
+}
+function buildAvatar(){
+ while(root.children.length)root.remove(root.children[0]);avatar={};
+ const s=mat(skin), h=mat(hair), shirt=mat(cloth), pants=mat('#303b4b'), shoe=mat('#171d28'), eye=mat('#241c1a'), white=mat('#f0e9df'), lip=mat('#89544d');
+ let female=gender==='female',height=Number($('height')?.value||50)/100,build=Number($('build')?.value||50)/100,face=Number($('faceShape')?.value||50)/100;
+ let H=1.75+(height-.5)*.42, torsoW=(female?.39:.43)+(.5-build)*.12, headW=.23+(face-.5)*.045;
+ // legs and shoes
+ let legLen=H*.49, hipY=legLen+.04;
+ for(let side of [-1,1]){
+  let x=side*torsoW*.34;
+  limb(root,[x,hipY,0],[x*1.05,.18,.02],.105,.075,pants);
+  sphere(root,x*1.05,.13,.07,.12,.075,.22,shoe);
+  sphere(root,x,hipY,0,.13,.14,.13,pants);
+ }
+ // torso clothing silhouette
+ let torso=mesh(new THREE.CapsuleGeometry(torsoW*.66,.58,8,20),shirt);torso.position.set(0,hipY+.38,0);torso.scale.set(1,1.08,.72);
+ sphere(root,0,hipY+.05,0,torsoW*.77,.16,.15,shirt);
+ // neck, head
+ cylinder(root,0,hipY+.78,0,0,hipY+.99,0,.09,.085,s);
+ let headY=hipY+1.18;
+ sphere(root,0,headY,0,headW,.29,.22,s);
+ // ears
+ for(let side of [-1,1])sphere(root,side*headW*.98,headY-.01,0,.045,.075,.04,s);
+ // facial features on front z+
+ for(let side of [-1,1]){
+  sphere(root,side*.088,headY+.035,.193,.044,.024,.014,white);
+  sphere(root,side*.088,headY+.035,.207,.019,.021,.01,eye);
+  sphere(root,side*.088,headY+.035,.216,.007,.008,.005,white);
+  let brow=sphere(root,side*.09,headY+.09,.19,.05,.012,.012,h);brow.rotation.z=side*-.08;
+ }
+ sphere(root,0,headY-.015,.217,.025,.055,.025,s);
+ sphere(root,0,headY-.115,.205,.062,.018,.012,lip);
+ // hair cap and hairstyle
+ sphere(root,0,headY+.16,-.005,headW*1.06,.15,.23,h);
+ let style=$('hairStyle')?.value||'short';
+ if(style==='curly'){for(let i=0;i<22;i++){let a=i/22*Math.PI*2;let b=sphere(root,Math.cos(a)*.205,headY+.13+Math.sin(i*2.1)*.035,Math.sin(a)*.15,.055,.06,.055,h);} }
+ if(style==='long'||style==='braids'){for(let side of [-1,1]){let strand=sphere(root,side*.19,headY-.13,-.015,.065,.36,.07,h);strand.rotation.z=side*-.08;}}
+ if(style==='fade'){sphere(root,0,headY+.22,0,headW*.88,.075,.18,h);}
+ if(style==='bun'){sphere(root,0,headY+.31,-.12,.11,.11,.11,h);}
+ // arms, sleeves, hands
+ for(let side of [-1,1]){
+  limb(root,[side*torsoW*.63,hipY+.68,0],[side*(torsoW*.88),hipY+.26,.02],.105,.07,shirt);
+  sphere(root,side*(torsoW*.88),hipY+.2,.02,.065,.09,.06,s);
+ }
+ // outfit details
+ if($('outfit')?.value==='hoodie'){sphere(root,0,hipY+.68,-.12,.16,.13,.035,mat('#b5a18a'));}
+ // shoes stripes and simple fabric seam
+ let seam=mesh(new THREE.BoxGeometry(.015,.42,.012),mat('#e6d9c5'));seam.position.set(.0,hipY+.35,.126);
+ root.scale.set(1,H/1.75,1);
+}
+function resize(){let el=$('viewport'),w=el.clientWidth,h=el.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+function updateCamera(){camera.position.set(0,2.5,cameraDist);camera.lookAt(0,1.45,0);}
+function animate(){requestAnimationFrame(animate);if(renderer){renderer.render(scene,camera);}}
+function makeColors(id,arr,callback){$(id).innerHTML=arr.map((c,i)=>`<button class="swatch ${i===2?'active':''}" style="background:${c}" data-c="${c}" aria-label="Choose colour"></button>`).join('');$(id).querySelectorAll('button').forEach(b=>b.onclick=()=>{$(id).querySelectorAll('button').forEach(x=>x.classList.remove('active'));b.classList.add('active');callback(b.dataset.c);});}
+function setGender(g){gender=g;$('female').classList.toggle('active',g==='female');$('male').classList.toggle('active',g==='male');$('genderTag').textContent=g.toUpperCase()+' PLAYER';renderPresets();buildAvatar();}
+function renderPresets(){let labels=gender==='female'?['Natural','Sporty','Classic','Curly']:['Natural','Athletic','Classic','Curly'];$('presets').innerHTML=labels.map((v,i)=>`<button class="preset ${i===preset?'active':''}" onclick="preset=${i};document.querySelectorAll('.preset').forEach((x,j)=>x.classList.toggle('active',i===j));applyPreset(${i})"><div class="head" style="background:linear-gradient(145deg,${['#d7b49d','#a8795d','#e0b89c','#8d6049'][i]},#332a2a)"></div>${v}</button>`).join('');}
+function applyPreset(i){$('hairStyle').value=['short','fade','long','curly'][i];$('faceShape').value=[50,62,42,55][i];buildAvatar();}
+function resetCamera(){cameraDist=6.4;rotY=0;rotX=0;root.rotation.set(0,0,0);updateCamera();}
+function zoom(f){cameraDist=Math.max(4.2,Math.min(9,cameraDist/f));updateCamera();}
+function confirmCharacter(){
+ let data={name:$('playerName').value||'Alex',gender,preset,height:Number($('height').value),build:Number($('build').value),face:Number($('faceShape').value),hairStyle:$('hairStyle').value,outfit:$('outfit').value,location:$('location').value,fatherAge:Number($('fatherAge').value),motherAge:Number($('motherAge').value),createdAt:new Date().toISOString()};
+ localStorage.setItem('realityPlayer',JSON.stringify(data));
+ localStorage.setItem('realityProCharacter',JSON.stringify(data));
+ window.location.href='home.html';
+}
+function resetAll(){$('height').value=50;$('build').value=50;$('faceShape').value=50;$('hairStyle').value='short';$('outfit').value='hoodie';skin='#a96f54';hair='#211817';cloth='#d1a66a';setGender('female');resetCamera();buildAvatar();}
+window.setGender=setGender;window.applyPreset=applyPreset;window.preset=preset;window.resetCamera=resetCamera;window.zoom=zoom;window.confirmCharacter=confirmCharacter;window.resetAll=resetAll;
+for(let id of ['height','build','faceShape'])$(id).addEventListener('input',()=>{$(id+'Out').textContent=$(id).value;buildAvatar();});
+$('hairStyle').addEventListener('change',buildAvatar);$('outfit').addEventListener('change',buildAvatar);
+makeColors('skinSwatches',skinSet,c=>{skin=c;buildAvatar();});makeColors('hairSwatches',hairSet,c=>{hair=c;buildAvatar();});makeColors('outfitSwatches',clothSet,c=>{cloth=c;buildAvatar();});
+for(let id of ['fatherAge','motherAge'])$(id).addEventListener('input',()=>$(id+'Out').textContent=$(id).value);
+init();renderPresets();updateCamera();
+</script></body></html>

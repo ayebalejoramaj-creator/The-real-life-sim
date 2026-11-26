@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Relationships · Reality</title><link rel="stylesheet" href="assets/game.css"></head><body><div data-game-nav></div><main class="wrap"><div class="eyebrow">Your social world</div><h1>Relationships & people</h1><p>Meet characters with their own interests, ambitions and stories.</p>
+<div class="notice">Relationships are part of your wider world. This first version uses fictional characters and simple profile interactions.</div>
+<h2 style="margin-top:20px">People you can meet</h2><section class="grid">
+<div class="card"><div class="profile"><div class="avatar">👩🏽</div><div><strong>Amina N.</strong><div class="label">Student · Kampala</div></div></div><p>Interested in design, music and community projects.</p><button onclick="connect('Amina N.')">Say hello</button></div>
+<div class="card"><div class="profile"><div class="avatar">👨🏿</div><div><strong>Daniel K.</strong><div class="label">Aspiring software developer</div></div></div><p>Enjoys technology, football and solving problems.</p><button onclick="connect('Daniel K.')">Say hello</button></div>
+<div class="card"><div class="profile"><div class="avatar">👩🏾</div><div><strong>Joan A.</strong><div class="label">Athlete · School team</div></div></div><p>Focused on athletics and balancing training with study.</p><button onclick="connect('Joan A.')">Say hello</button></div>
+<div class="card"><div class="profile"><div class="avatar">👨🏽</div><div><strong>Michael T.</strong><div class="label">Music producer</div></div></div><p>Learning audio production and building a creative network.</p><button onclick="connect('Michael T.')">Say hello</button></div>
+</section><h2 style="margin-top:22px">Your connections</h2><div class="card" id="connections">No connections yet.</div>
+</main><script src="assets/game.js"></script><script>
+function connect(n){let a=JSON.parse(localStorage.getItem('realityConnections')||'[]');if(!a.includes(n))a.push(n);localStorage.setItem('realityConnections',JSON.stringify(a));renderConnections()}
+function renderConnections(){let a=JSON.parse(localStorage.getItem('realityConnections')||'[]');document.getElementById('connections').textContent=a.length?a.join(' · '):'No connections yet.'}renderConnections();</script></body></html>

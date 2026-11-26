@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Achievements · Reality</title><link rel="stylesheet" href="assets/game.css"></head><body><div data-game-nav></div><main class="wrap"><div class="eyebrow">Milestones</div><h1>Achievements</h1><p>Track your progress as you learn, work and build your place in the world.</p>
+<section class="grid">
+<div class="card"><div class="eyebrow">FIRST STEPS</div><h2>Welcome to Reality</h2><p>Create your player and enter the world.</p><div id="a1" class="label">Status: checking…</div></div>
+<div class="card"><div class="eyebrow">LEARNER</div><h2>First task completed</h2><p>Complete a study or career activity.</p><div id="a2" class="label">Status: checking…</div></div>
+<div class="card"><div class="eyebrow">NETWORKER</div><h2>First connection</h2><p>Meet someone in the world.</p><div id="a3" class="label">Status: checking…</div></div>
+</section>
+</main><script src="assets/game.js"></script><script>
+const p=JSON.parse(localStorage.getItem('realityPlayer')||'null'),t=JSON.parse(localStorage.getItem('realityTasks')||'[]'),c=JSON.parse(localStorage.getItem('realityConnections')||'[]');
+document.getElementById('a1').textContent=p?'Unlocked':'Not yet unlocked';
+document.getElementById('a2').textContent=t.length?'Unlocked':'Not yet unlocked';
+document.getElementById('a3').textContent=c.length?'Unlocked':'Not yet unlocked';
+</script></body></html>

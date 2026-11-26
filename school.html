@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>School & Employment · Reality</title><link rel="stylesheet" href="assets/game.css"></head><body><div data-game-nav></div><main class="wrap"><div class="eyebrow">Growth and opportunity</div><h1>School, work & tasks</h1><p>Build qualifications, explore careers and make progress through practical activities.</p>
+<section class="grid">
+<div class="card"><h2>Education paths</h2><div class="list">
+<div class="item"><strong>Secondary school</strong><small>Build core knowledge and qualifications.</small><button onclick="completeTask('Completed a study session')">Study session</button></div>
+<div class="item"><strong>University</strong><small>Explore degrees in technology, business, health, engineering, arts and more.</small><button onclick="completeTask('Researched university options')">Research options</button></div>
+<div class="item"><strong>Professional training</strong><small>Short courses, apprenticeships and certificates.</small><button onclick="completeTask('Completed a skills lesson')">Skills lesson</button></div></div></div>
+<div class="card"><h2>Employment board</h2><div class="list">
+<div class="item"><strong>Retail assistant</strong><small>Customer service · Entry level</small><button onclick="applyJob('Retail assistant')">Apply</button></div>
+<div class="item"><strong>Junior digital assistant</strong><small>Technology · Entry level</small><button onclick="applyJob('Junior digital assistant')">Apply</button></div>
+<div class="item"><strong>Farm operations trainee</strong><small>Agriculture · Entry level</small><button onclick="applyJob('Farm operations trainee')">Apply</button></div>
+<div class="item"><strong>Sports academy trainee</strong><small>Sports · Development</small><button onclick="applyJob('Sports academy trainee')">Apply</button></div></div></div>
+</section><h2 style="margin-top:22px">Tasks & progress</h2><div class="card"><div id="taskList" class="list"><div class="item">Your tasks will appear here.</div></div></div>
+</main><script src="assets/game.js"></script><script>
+function tasks(){return JSON.parse(localStorage.getItem('realityTasks')||'[]')}
+function renderTasks(){let a=tasks();document.getElementById('taskList').innerHTML=a.length?a.map(t=>'<div class="item"><strong>'+t.text+'</strong><small>'+t.date+'</small></div>').join(''):'<div class="item">No completed tasks yet. Choose an activity above.</div>'}
+function completeTask(t){let a=tasks();a.unshift({text:t,date:new Date().toLocaleString()});localStorage.setItem('realityTasks',JSON.stringify(a));renderTasks()}
+function applyJob(j){localStorage.setItem('realityJobApplication',j);completeTask('Applied for '+j);alert('Application submitted in the game: '+j)}
+renderTasks();</script></body></html>
