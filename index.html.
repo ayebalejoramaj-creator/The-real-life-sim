@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>REALITY // World Simulator</title>
+<style>
+:root{--bg:#09111f;--panel:#121e31;--panel2:#1a2a43;--line:#30435f;--ink:#edf3ff;--muted:#a9b8cf;--gold:#f5c84b;--green:#6fe0ad;--red:#ff9292;--blue:#82b9ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -10%,#263c5d 0,#09111f 58%);color:var(--ink);font:15px/1.5 system-ui,Segoe UI,sans-serif}
+main{max-width:1120px;margin:auto;padding:18px 14px 50px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.brand{font-weight:950;letter-spacing:.16em;color:var(--gold)}.pill{font-size:11px;border:1px solid var(--line);padding:5px 9px;border-radius:99px;color:var(--muted)}
+h1{font-size:clamp(29px,5vw,48px);line-height:1.02;margin:24px 0 7px}h2{font-size:22px;margin:4px 0 10px}h3{font-size:16px;margin:0 0 8px}.muted{color:var(--muted)}.small{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin-top:16px}.panel{background:rgba(18,30,49,.96);border:1px solid var(--line);border-radius:16px;padding:15px;min-width:0}.span12{grid-column:span 12}.span8{grid-column:span 8}.span7{grid-column:span 7}.span6{grid-column:span 6}.span5{grid-column:span 5}.span4{grid-column:span 4}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:16px}.stat{background:#111d30;border:1px solid var(--line);border-radius:12px;padding:10px}.stat b{display:block;color:var(--gold);font-size:19px}.stat span{font-size:11px;color:var(--muted)}
+button,select,input{font:inherit}button{cursor:pointer}.btn{border:0;border-radius:10px;padding:10px 13px;font-weight:800;background:var(--gold);color:#15191f}.btn.secondary{background:#253853;color:var(--ink);border:1px solid var(--line)}.btn:disabled{opacity:.4;cursor:not-allowed}
+select,input{width:100%;background:#0c1728;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px}
+label{display:block;color:var(--muted);font-size:12px;margin:8px 0 5px}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.choice{display:block;width:100%;text-align:left;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:12px;margin:8px 0}.choice:hover{border-color:var(--gold)}.choice strong{display:block;margin-bottom:3px}
+.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--gold);font-weight:900}.scenario{white-space:pre-line;font-size:15px}.tip{border-left:3px solid var(--blue);background:#102139;padding:10px 12px;border-radius:0 10px 10px 0;color:#d5e5fb;margin:12px 0}
+.feed{max-height:255px;overflow:auto}.event{padding:9px 0;border-bottom:1px solid #263751}.event:last-child{border:0}.good{color:var(--green)}.bad{color:var(--red)}
+.agent{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid #263751}.agent:last-child{border:0}.tag{font-size:10px;border:1px solid #405574;border-radius:99px;padding:2px 7px;color:var(--muted)}
+.asset{border:1px solid var(--line);border-radius:12px;padding:11px;background:#101a2c}.asset b{display:block}.asset .price{color:var(--gold);font-weight:850}.bar{height:6px;background:#263751;border-radius:99px;overflow:hidden;margin:5px 0 10px}.bar i{display:block;height:100%;background:var(--green)}
+.hidden{display:none!important}.modalback{position:fixed;inset:0;background:#000a;display:grid;place-items:center;padding:16px;z-index:5}.modal{max-width:560px;width:100%;background:#14223a;border:1px solid var(--line);border-radius:16px;padding:20px}
+@media(max-width:760px){.span8,.span7,.span6,.span5,.span4{grid-column:span 12}.stats{grid-template-columns:repeat(3,1fr)}}
+</style></head>
+<body><main>
+<div class="top"><div class="brand">REALITY // WORLD SIMULATOR</div><div class="row" style="flex:0 1 auto"><span class="pill">UGX ECONOMY</span><span class="pill">CAREER · COMPETITION · LIFE</span><span class="pill">V2.0</span></div></div>
+<h1>Build a life.<br>Compete with intelligence.</h1>
+<p class="muted">A fictional but reality-grounded learning simulation. Build skills and a career across modern industries, compete against simulated AI rivals, manage money responsibly, and unlock homes and cars as your means grow.</p>
+<div class="stats">
+ <div class="stat"><b id="cash">UGX 500k</b><span>Available cash</span></div><div class="stat"><b id="xp">0</b><span>Learning XP</span></div><div class="stat"><b id="rep">10</b><span>Reputation</span></div><div class="stat"><b id="level">1</b><span>Level</span></div><div class="stat"><b id="well">70</b><span>Life balance</span></div><div class="stat"><b id="round">0/12</b><span>Turns played</span></div>
+</div>
+<div class="grid">
+ <section class="panel span8">
+  <div class="eyebrow">Your direction</div><h2>Choose a career path</h2>
+  <div class="row"><div><label for="career">Career / professional track</label><select id="career"></select></div><div><label for="sector">Current sector focus</label><select id="sector"></select></div></div>
+  <p class="small" id="careerInfo">Your career shapes the opportunities you encounter.</p>
+  <div class="row"><button class="btn secondary" id="careerSet">Confirm direction</button><button class="btn secondary" id="rest">Take a balanced day</button></div>
+ </section>
+ <section class="panel span4">
+  <div class="eyebrow">AI competition</div><h2>Rival agents</h2><p class="small">These are locally simulated competitors with different strategies—not connected to live AI services.</p><div id="agents"></div>
+ </section>
+ <section class="panel span8" id="missionPanel">
+  <div class="eyebrow" id="missionMeta">Your next real-world challenge</div><h2 id="missionTitle">A new opportunity is waiting</h2>
+  <div class="scenario" id="missionText">Choose your career direction, then begin your first turn.</div>
+  <div class="tip" id="missionTip">Every scenario is designed to teach a transferable skill. Outcomes are illustrative, not financial or professional advice.</div>
+  <div id="options"></div><div id="debrief" class="tip hidden"></div>
+  <div class="row"><button class="btn" id="next" disabled>Next challenge</button><button class="btn secondary" id="start">Start / new challenge</button></div>
+ </section>
+ <section class="panel span4">
+  <div class="eyebrow">Your development</div><h2>Skill profile</h2><div id="skills"></div>
+  <div class="small">Scores are game indicators, not IQ or psychological measurements.</div>
+ </section>
+ <section class="panel span7">
+  <div class="eyebrow">Lifestyle milestones</div><h2>Cars & homes</h2><p class="small">Unlock aspirational assets as milestones. Buying one reduces cash and adds ongoing costs; do not purchase beyond your means.</p>
+  <div class="grid" style="margin-top:8px" id="assets"></div>
+ </section>
+ <section class="panel span5">
+  <div class="eyebrow">Family & community intelligence</div><h2>Human side quests</h2><p class="small">Light, respectful scenarios about communication, shared responsibilities, listening and community. No invasive personal-life roleplay.</p>
+  <button class="btn secondary" id="family">Play a family / community side quest</button><div id="familyResult" class="small" style="margin-top:10px"></div>
+ </section>
+ <section class="panel span12">
+  <div class="eyebrow">World activity log</div><h2>What you've learned</h2><div class="feed" id="log"><div class="small">Your decisions and learning notes will appear here.</div></div>
+ </section>
+</div>
+<p class="small" style="margin-top:18px">This is an offline prototype. Scenarios, rival actions, prices and progression are fictional game data. It does not connect to real employers, banks, markets, dealerships or property listings. Refreshing the page restarts the game.</p>
+</main>
+<div id="modal" class="modalback hidden"><div class="modal"><div class="eyebrow">Milestone purchase</div><h2 id="modalTitle"></h2><p id="modalText" class="muted"></p><div class="row"><button class="btn" id="buyConfirm">Confirm purchase</button><button class="btn secondary" id="buyCancel">Cancel</button></div></div></div>
+<script>
+const careers=[
+["Software developer","Technology","Build useful software; practise product thinking, debugging and delivery."],
+["AI / machine-learning specialist","Technology","Work with data, model evaluation, automation and responsible AI."],
+["Cybersecurity analyst","Technology","Assess threats, protect systems and communicate risk."],
+["Data analyst","Technology","Turn messy information into evidence-based decisions."],
+["Product manager","Technology","Balance customer needs, delivery constraints and business value."],
+["UX / product designer","Creative & Media","Research users and design clear, accessible experiences."],
+["Digital marketer","Creative & Media","Understand audiences, test campaigns and measure outcomes."],
+["Content creator / media producer","Creative & Media","Create trustworthy content and build a sustainable audience."],
+["Entrepreneur / business owner","Business & Trade","Find customer problems, manage cash flow and build operations."],
+["Accountant / finance analyst","Finance","Understand records, budgets, controls and financial risk."],
+["Investment / risk analyst","Finance","Evaluate evidence, uncertainty and portfolio risk."],
+["Sales / business development","Business & Trade","Discover needs, negotiate fairly and build durable relationships."],
+["Doctor / healthcare professional","Health & Science","Use evidence, ethics and clear communication to support care."],
+["Biomedical / laboratory scientist","Health & Science","Apply scientific method, quality control and accurate reporting."],
+["Civil / structural engineer","Engineering & Infrastructure","Design safe, reliable infrastructure within constraints."],
+["Renewable-energy technician","Engineering & Infrastructure","Understand energy systems, maintenance and sustainability."],
+["Architect / construction manager","Engineering & Infrastructure","Coordinate design, safety, budgets and delivery."],
+["Teacher / learning designer","Education","Explain ideas, assess learning and adapt to learners."],
+["Lawyer / legal researcher","Public Service & Law","Analyse facts, procedure, rights and competing arguments."],
+["Policy / public-service analyst","Public Service & Law","Evaluate public problems, evidence and implementation."],
+["Agribusiness / food systems","Agriculture & Environment","Manage production, logistics, quality and market access."],
+["Logistics / supply-chain manager","Transport & Logistics","Plan inventory, routes, suppliers and disruptions."],
+["Hospitality / tourism manager","Hospitality & Tourism","Deliver service, manage operations and solve guest problems."],
+["Athlete / sports professional","Sports & Entertainment","Train consistently, analyse performance and manage a career."],
+["Researcher / scientist","Health & Science","Ask testable questions, analyse evidence and share findings."]
+];
+const sectors=["Technology","Finance","Health & Science","Education","Engineering & Infrastructure","Agriculture & Environment","Business & Trade","Creative & Media","Transport & Logistics","Hospitality & Tourism","Public Service & Law","Sports & Entertainment","Real Estate & Construction"];
+const scenarios=[
+{sector:"Finance",title:"A too-good-to-be-true return",text:"A contact offers a guaranteed 25% monthly return if you transfer UGX 300,000 today. They show screenshots, but you cannot verify the source. They say asking too many questions means you lack ambition.",tip:"Separate evidence from persuasion. Check regulation, custody, risks and written terms independently. Never invest money you cannot afford to lose.",opts:[
+["Transfer today before the offer closes.",-8,-4,-2,0,"Urgency and guaranteed high returns are warning signs. You have no verified business model or enforceable terms."],
+["Ask for independently verifiable records, regulatory status, risk disclosures and time to review.",9,8,4,3,"You resisted pressure and asked for evidence. A legitimate opportunity should withstand reasonable due diligence."],
+["Send a small amount just to test them.",-2,1,1,1,"A small test still exposes you and may be used to build trust before a larger request. Verify first."]
+]},
+{sector:"Technology",title:"The product launch is failing",text:"Your small app has 200 sign-ups but only 8 active users. A competitor has launched a similar product. Your team wants to spend the remaining budget on flashy advertising.",tip:"A product needs evidence of a real user problem, retention and a sustainable acquisition path—not just downloads.",opts:[
+["Spend the remaining budget on ads immediately.",-5,-4,-2,0,"More traffic will not fix a product users do not return to. You need to understand the drop-off first."],
+["Interview users, inspect the onboarding funnel and test one improvement before scaling marketing.",9,9,4,3,"Excellent product thinking: diagnose before spending, then run a measurable experiment."],
+["Copy the competitor's newest features.",1,0,1,1,"Competitor research is useful, but copying features without understanding your users can waste time."]
+]},
+{sector:"Health & Science",title:"Conflicting health information",text:"A relative sends a viral post claiming a common medicine is dangerous and urges everyone to stop taking it. Another family member is currently using that medicine under a clinician's care.",tip:"Do not make medication changes based on forwarded posts. Check trusted health authorities and consult the treating clinician or pharmacist.",opts:[
+["Tell everyone to stop taking it immediately.",-9,-5,-4,0,"That could cause harm. Medication changes should be guided by a qualified professional who knows the person's circumstances."],
+["Check reputable health guidance and encourage the person to speak to their clinician or pharmacist before changing anything.",9,8,6,3,"You protect safety, avoid amplifying misinformation and direct the person to qualified advice."],
+["Ignore all health information online, including official sources.",0,-2,1,1,"Scepticism is useful, but reliable public-health information can help when checked against authoritative sources."]
+]},
+{sector:"Business & Trade",title:"A major customer wants credit",text:"A new customer asks for stock worth UGX 700,000 on 30-day credit and promises a much larger order next month. You have never worked with them, and the stock represents most of your working capital.",tip:"Think about cash conversion, customer verification, written terms, deposits and the cost of a late or unpaid invoice.",opts:[
+["Release all stock because the future order could be huge.",-8,-5,-2,0,"A promised future order is not guaranteed. You have concentrated too much working capital in one untested customer."],
+["Verify the customer, check references and offer a smaller first order with a deposit and written terms.",9,8,5,3,"A sensible pilot limits exposure while testing whether the customer pays reliably."],
+["Reject them rudely and block the contact.",1,0,-3,1,"Declining risky credit may be wise, but professional communication preserves options and reputation."]
+]},
+{sector:"Engineering & Infrastructure",title:"The deadline versus safety",text:"A construction supervisor says a safety inspection can be skipped to meet a deadline. They insist the work looks fine and promise to take responsibility if anything goes wrong.",tip:"Safety-critical work requires proper inspection, documentation and qualified sign-off. Schedule pressure does not remove responsibility.",opts:[
+["Skip the inspection to protect the deadline.",-10,-3,-3,0,"You accepted avoidable safety and legal risk. A visual impression is not a substitute for required inspection."],
+["Pause the affected work, document the concern and request the required qualified inspection.",9,8,6,3,"You prioritised safety and traceability. Escalate through the proper site process."],
+["Argue loudly in front of everyone.",0,0,-4,1,"Raising the issue matters, but a calm, documented escalation is more effective and less likely to distract from safety."]
+]},
+{sector:"Education",title:"A learner is falling behind",text:"A student in your group repeatedly misses deadlines. Other members want them removed from the project. You learn they may not understand one key concept, but nobody has checked.",tip:"Good leadership combines accountability with curiosity. Identify the barrier, agree on a clear contribution and keep the whole team informed.",opts:[
+["Remove them immediately without discussion.",-2,-2,-2,0,"You may solve the immediate workload problem but miss a fixable learning or communication issue."],
+["Speak privately, identify the obstacle, agree on a specific task and checkpoint, then review progress.",9,9,7,3,"You combined empathy with accountability and made the next step measurable."],
+["Do their part yourself and say nothing.",-3,-1,1,0,"This may help once, but it hides the problem and creates an unfair, unsustainable pattern."]
+]},
+{sector:"Agriculture & Environment",title:"The harvest decision",text:"A buyer offers to purchase your entire harvest immediately at a lower price than you expected. You have limited storage, and weather forecasts suggest heavy rain next week.",tip:"Compare net proceeds, spoilage risk, storage cost, transport, buyer reliability and the value of splitting the sale.",opts:[
+["Reject the offer because your expected price must be right.",-3,-2,-1,0,"Holding out may pay off, but your expected price is not guaranteed and spoilage can erase the upside."],
+["Compare current net offers, storage and weather risk; consider selling a portion now and diversifying buyers.",9,9,5,3,"You are managing uncertainty rather than trying to predict one perfect price."],
+["Accept without checking weighing, grading or payment terms.",-5,-3,-2,0,"A quick sale can be sensible, but unclear measurements and payment terms invite disputes."]
+]},
+{sector:"Creative & Media",title:"A viral post with false claims",text:"A post using your video is spreading quickly, but it falsely claims a local business cheated customers. Sharing it would boost your audience. You have not verified the allegation.",tip:"Reach is not worth avoidable harm. Verify claims, distinguish opinion from fact and correct mistakes transparently.",opts:[
+["Repost it with an angry caption to gain attention.",-7,-5,-3,0,"You amplify a potentially false allegation and expose yourself and others to reputational and legal consequences."],
+["Verify with credible sources, contact the parties where appropriate and avoid presenting unconfirmed claims as fact.",9,9,5,3,"You chose accuracy and fairness over short-term engagement."],
+["Delete your own content and never discuss the issue.",1,0,2,1,"Avoiding amplification is sensible, but responsible reporting or a careful correction may still be useful."]
+]},
+{sector:"Transport & Logistics",title:"A delivery route is disrupted",text:"A key road is blocked and several deliveries are late. A client is demanding an exact arrival time, but you do not yet know how long the diversion will take.",tip:"Communicate uncertainty honestly, give a realistic update window and prioritise safety and high-impact deliveries.",opts:[
+["Invent an arrival time to calm the client.",-5,-4,-3,0,"False certainty damages trust when the estimate fails. Communicate what is known and when you will update."],
+["Check route options, reprioritise urgent deliveries and give clients a transparent update with a next check-in time.",9,8,7,3,"You managed operations and expectations without pretending to know more than you do."],
+["Wait silently until the problem is solved.",-3,-2,-2,0,"Silence creates uncertainty for customers who may be able to make alternative arrangements."]
+]},
+{sector:"Hospitality & Tourism",title:"A guest complaint",text:"A guest says their room is not ready despite a confirmed check-in time. The hotel is full, and the front desk is busy. The guest is upset but speaking calmly.",tip:"Listen, acknowledge the inconvenience, check the facts and offer realistic options without promising what operations cannot deliver.",opts:[
+["Blame housekeeping in front of the guest.",-4,-2,-4,0,"Blame does not solve the guest's problem and undermines team trust."],
+["Apologise, verify the room status, offer available alternatives and give a specific update time.",9,8,8,3,"You combined service recovery with operational follow-through."],
+["Promise an upgrade without checking availability.",-2,-1,-2,1,"A generous promise can create a second failure if the option is unavailable. Verify before offering."]
+]},
+{sector:"Public Service & Law",title:"A favour in the queue",text:"Someone offers you money to move their application ahead of other people. They say everyone does it and no one will know. You are responsible for processing applications fairly.",tip:"Fair process, transparency and conflict-of-interest controls protect both the public and the institution.",opts:[
+["Accept because it is a small amount.",-10,-5,-5,0,"This is a misuse of entrusted responsibility and can harm people waiting fairly."],
+["Decline, document the approach if policy requires it and follow the official queue and reporting process.",9,9,7,3,"You protected fairness and your professional integrity."],
+["Move the application ahead but refuse the money.",-5,-2,-3,0,"Even without payment, favouritism undermines fair process. Apply the same rules to everyone."]
+]},
+{sector:"Sports & Entertainment",title:"The sponsorship offer",text:"A brand offers to sponsor your sports career, but the contract includes broad rights to your image for many years and unclear performance obligations. They want your signature today.",tip:"Understand duration, exclusivity, payment, deliverables, termination, image rights and dispute terms. Get qualified advice before signing.",opts:[
+["Sign immediately; sponsorship is hard to get.",-7,-3,-2,0,"A valuable opportunity can still contain costly terms. Do not let excitement replace contract review."],
+["Request the full contract, clarify obligations and seek independent professional advice before signing.",9,9,5,3,"You protect long-term options while treating the opportunity seriously."],
+["Reject all sponsorships permanently.",1,0,1,1,"Caution is sensible, but careful review can help distinguish fair opportunities from harmful ones."]
+]},
+{sector:"Real Estate & Construction",title:"The property deposit",text:"An agent offers a house at an unusually attractive price and asks for a deposit before you can inspect the property or verify ownership documents. They say another buyer is waiting.",tip:"Property transactions require independent title and ownership checks, physical verification, written terms and qualified local legal advice.",opts:[
+["Pay the deposit to secure the bargain.",-9,-5,-3,0,"Pressure plus no verification is a serious warning. Recovering a deposit can be difficult."],
+["Arrange an inspection and independent legal/title checks before any payment; verify the agent's authority.",9,9,5,3,"You made verification a condition of commitment, which is essential in high-value transactions."],
+["Send a photo of your ID and ask them to hold it.",-4,-2,-1,0,"Sharing identity documents does not establish ownership or protect your deposit. Verify the property and counterparty."]
+]}
+];
+const family=[
+{q:"A family member disagrees with a practical decision you made. What is the most constructive first move?",a:["Listen to their concern, explain your reasoning and look for the facts you may both be missing.","Try to win the argument quickly.","Avoid them until they agree."],good:0,learn:"Listening is not surrender. It helps uncover information and preserves trust while you still make your own decision."},
+{q:"A shared household task keeps being forgotten. What would help most?",a:["Agree on clear ownership, a realistic schedule and a simple reminder.","Complain each time it happens.","Assume someone else will handle it."],good:0,learn:"Shared systems reduce repeated friction. Clear responsibilities work better than vague expectations."},
+{q:"A younger person asks you for career advice, but you are unsure of the answer.",a:["Admit what you don't know and help them find reliable information or someone experienced.","Make up a confident answer.","Tell them the choice is entirely theirs and disengage."],good:0,learn:"Good mentoring models intellectual honesty and shows how to find trustworthy guidance."},
+{q:"A community project has a small budget and many competing needs.",a:["Ask affected people what matters most, set transparent priorities and track spending.","Let the loudest person decide.","Spend the money quickly so the project looks active."],good:0,learn:"Inclusive prioritisation and transparent budgeting build trust and improve outcomes."}
+];
+const cars=[["Used compact car",18000000,"Entry asset · transport"],["Performance coupe",95000000,"Sports car · high running costs"],["Luxury sports car",280000000,"Premium milestone · substantial upkeep"]];
+const homes=[["Starter home",85000000,"A first property milestone"],["Modern family house",240000000,"More space · maintenance costs"],["Architect-designed residence",650000000,"High-end milestone · significant upkeep"]];
+let state={cash:500000,xp:0,rep:10,well:70,turn:0,career:careers[0][0],sector:"Technology",skills:{reasoning:50,people:50,execution:50,financial:50},owned:[],current:null,done:false};
+let rivals=[{n:"Maya Chen",style:"Research-led",score:0,rep:62},{n:"Daniel Okello",style:"Fast operator",score:0,rep:58},{n:"Amina Patel",style:"People-first",score:0,rep:65},{n:"Kato Mensah",style:"Risk manager",score:0,rep:60}];
+const el=id=>document.getElementById(id),fmt=n=>"UGX "+Math.round(n).toLocaleString("en-US");
+function initSelects(){el("career").innerHTML=careers.map(c=>`<option>${c[0]}</option>`).join("");el("sector").innerHTML=sectors.map(s=>`<option>${s}</option>`).join("");}
+function update(){el("cash").textContent=fmt(state.cash);el("xp").textContent=state.xp;el("rep").textContent=state.rep;el("level").textContent=1+Math.floor(state.xp/30);el("well").textContent=state.well;el("round").textContent=state.turn+"/12";
+ el("skills").innerHTML=Object.entries(state.skills).map(([k,v])=>`<div class="small" style="text-transform:capitalize">${k} · ${v}/100</div><div class="bar"><i style="width:${v}%"></i></div>`).join("");
+ el("agents").innerHTML=[...rivals].sort((a,b)=>b.score-a.score).map((r,i)=>`<div class="agent"><div><b>${i+1}. ${r.n}</b><div class="small">${r.style}</div></div><div style="text-align:right"><b>${r.score} XP</b><div class="small">Rep ${r.rep}</div></div></div>`).join("");
+ renderAssets();}
+function log(msg){const d=document.createElement("div");d.className="event";d.textContent=msg;el("log").prepend(d);}
+function careerChange(){state.career=el("career").value;state.sector=el("sector").value;let c=careers.find(x=>x[0]===state.career);el("careerInfo").textContent=c[2]+" Sector focus: "+state.sector+".";log("Career direction set: "+state.career+" · "+state.sector+".");}
+function startChallenge(){if(state.turn>=12){el("missionTitle").textContent="Season complete";el("missionText").textContent="You completed 12 challenges. Review your learning log, improve your skills and restart to play a new season.";el("options").innerHTML="";el("next").disabled=true;return}
+ let pool=scenarios.filter(s=>s.sector===state.sector);if(!pool.length)pool=scenarios;state.current=pool[Math.floor(Math.random()*pool.length)];el("missionMeta").textContent="Turn "+(state.turn+1)+" · "+state.current.sector;el("missionTitle").textContent=state.current.title;el("missionText").textContent=state.current.text;el("missionTip").textContent="Think about: "+state.current.tip;el("debrief").classList.add("hidden");el("next").disabled=true;
+ el("options").innerHTML=state.current.opts.map((o,i)=>`<button class="choice" data-i="${i}"><strong>${String.fromCharCode(65+i)}. ${o[0]}</strong><span class="small">Choose this response</span></button>`).join("");
+ [...el("options").querySelectorAll("button")].forEach(b=>b.onclick=()=>resolve(+b.dataset.i));}
+function resolve(i){const s=state.current,o=s.opts[i];if(!o)return;[...el("options").querySelectorAll("button")].forEach(b=>b.disabled=true);
+ state.skills.reasoning=clamp(state.skills.reasoning+o[1]);state.skills.financial=clamp(state.skills.financial+(s.sector==="Finance"||s.sector==="Business & Trade"?o[1]:Math.round(o[1]/2)));state.skills.people=clamp(state.skills.people+o[2]);state.skills.execution=clamp(state.skills.execution+o[3]);
+ state.xp+=Math.max(1,o[4]*5);state.rep=clamp(state.rep+o[4]*2);state.cash=Math.max(0,state.cash+(o[4]===3?15000:o[4]===2?5000:o[4]===1?0:-10000));state.turn++;
+ // Rival agents independently select a strategy-weighted result; outcomes are simulated, not AI service calls.
+ rivals.forEach(r=>{let vals=s.opts.map((x,j)=>({j,v:x[4]+(r.style==="Research-led"?(x[1]+x[2])/25:r.style==="Fast operator"?x[3]/10:r.style==="People-first"?x[2]/10:x[1]/10)+(Math.random()-.5)*1.4}));vals.sort((a,b)=>b.v-a.v);let pick=vals[0].j;r.score+=Math.max(1,s.opts[pick][4]*5);r.rep=clamp(r.rep+s.opts[pick][4]);});
+ el("debrief").classList.remove("hidden");el("debrief").innerHTML=`<b>${o[4]>=3?"Strong strategic decision":o[4]===2?"Sound decision":o[4]===1?"Mixed result":"Risky outcome"}</b><br>${o[5]}<br><span class="small">Learning XP +${Math.max(1,o[4]*5)} · Reputation ${o[4]>=2?"+":""}${o[4]*2} · Illustrative cash impact ${o[4]===3?"+UGX 15,000":o[4]===2?"+UGX 5,000":o[4]===1?"UGX 0":"-UGX 10,000"}</span>`;
+ el("next").disabled=false;el("next").textContent=state.turn>=12?"Finish season":"Next challenge";update();log(s.sector+": "+s.title+" — "+o[5]);}
+function clamp(v){return Math.max(0,Math.min(100,v))}
+function renderAssets(){el("assets").innerHTML=`<div class="span12"><h3>Cars</h3><div class="grid" style="margin:0">${cars.map((a,i)=>assetCard(a,"car"+i)).join("")}</div><h3 style="margin-top:12px">Homes</h3><div class="grid" style="margin:0">${homes.map((a,i)=>assetCard(a,"home"+i)).join("")}</div></div>`;}
+function assetCard(a,id){let owned=state.owned.includes(id),price=a[1];return `<div class="asset span12"><b>${a[0]}</b><div class="small">${a[2]}</div><div class="price">${fmt(price)}</div><button class="btn secondary" style="margin-top:8px;width:100%" ${owned?"disabled":""} onclick="purchase('${id}')">${owned?"Owned":state.cash>=price?"Purchase milestone":"Not yet affordable"}</button></div>`;}
+let pending=null;
+function purchase(id){let list=id.startsWith("car")?cars:homes,a=list[+id.replace(/\D/g,"")];if(!a||state.owned.includes(id)||state.cash<a[1])return;pending={id,a};el("modalTitle").textContent=a[0];el("modalText").textContent=`This costs ${fmt(a[1])}. It is a game milestone, not a real listing. Your remaining cash would be ${fmt(state.cash-a[1])}. Consider whether you have enough left for other needs.`;el("modal").classList.remove("hidden");}
+el("buyConfirm").onclick=()=>{if(!pending)return;state.cash-=pending.a[1];state.owned.push(pending.id);state.xp+=10;log("Milestone acquired: "+pending.a[0]+". Remember that ownership also brings ongoing costs.");pending=null;el("modal").classList.add("hidden");update();};
+el("buyCancel").onclick=()=>{pending=null;el("modal").classList.add("hidden")};
+el("careerSet").onclick=careerChange;
+el("start").onclick=startChallenge;
+el("next").onclick=()=>{if(state.turn>=12){el("missionTitle").textContent="Season complete";el("missionText").textContent="You completed this season. Restart to begin a fresh run with a new set of decisions.";el("options").innerHTML="";el("next").disabled=true;}else startChallenge();};
+el("rest").onclick=()=>{state.well=clamp(state.well+8);state.xp+=2;log("You took a balanced day: recovery supports long-term performance. +2 XP, +8 life balance.");update();};
+el("family").onclick=()=>{let q=family[Math.floor(Math.random()*family.length)];el("familyResult").innerHTML=`<b>${q.q}</b><br>${q.a.map((a,i)=>`<button class="choice" data-f="${i}">${a}</button>`).join("")}`;[...el("familyResult").querySelectorAll("button")].forEach(b=>b.onclick=()=>{let good=+b.dataset.f===q.good;state.xp+=good?4:1;state.skills.people=clamp(state.skills.people+(good?3:0));el("familyResult").innerHTML=`<span class="${good?"good":"bad"}"><b>${good?"Good approach":"Something to reconsider"}</b></span><br>${q.learn}`;update();log("Family/community side quest: "+q.learn);});};
+el("career").onchange=()=>{let c=careers.find(x=>x[0]===el("career").value);el("careerInfo").textContent=c[2]};
+el("sector").onchange=()=>{el("careerInfo").textContent="Sector focus: "+el("sector").value+". Challenges in this sector will be prioritised."};
+initSelects();el("careerInfo").textContent=careers[0][2];update();startChallenge();
+</script></body></html>
