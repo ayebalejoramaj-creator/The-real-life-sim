@@ -1,8 +1,81 @@
-const STORE_KEY='realityPlayer';
-function getPlayer(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'null')}catch(e){return null}}
-function requirePlayer(){const p=getPlayer();if(!p){location.href='character.html';return null}return p}
-function money(n){return 'UGX '+Number(n||0).toLocaleString('en-US')}
-function setActiveNav(){const here=location.pathname.split('/').pop()||'index.html';document.querySelectorAll('.nav a').forEach(a=>{if(a.getAttribute('href')===here)a.classList.add('active')})}
-function renderPlayerSummary(){const p=getPlayer();document.querySelectorAll('[data-player-name]').forEach(x=>x.textContent=p?.name||'New player');document.querySelectorAll('[data-player-location]').forEach(x=>x.textContent=p?.location||'Not set');}
-function nav(){return `<header class="top"><div class="brand">REALITY / WORLD SIMULATOR</div><nav class="nav"><a href="home.html">Home</a><a href="school.html">School & Jobs</a><a href="relationships.html">Relationships</a><a href="news.html">News</a><a href="achievements.html">Achievements</a><a href="character.html">Character</a></nav></header>`}
-document.addEventListener('DOMContentLoaded',()=>{const n=document.querySelector('[data-game-nav]');if(n)n.innerHTML=nav();setActiveNav();renderPlayerSummary()});
+
+const STORE_KEY = 'realityPlayer';
+
+function getPlayer() {
+  try {
+    return JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+  } catch {
+    return null;
+  }
+}
+
+function requirePlayer() {
+  const player = getPlayer();
+  if (!player) location.href = 'character.html';
+  return player;
+}
+
+function money(amount) {
+  return 'UGX ' + Number(amount || 0).toLocaleString('en-US');
+}
+
+function nav() {
+  return `
+    <header class="game-header">
+      <a class="game-brand" href="home.html">
+        <span class="brand-mark">R</span>
+        <span>REALITY</span>
+      </a>
+      <div class="header-player">
+        <span class="header-dot"></span>
+        <span data-player-name>Player</span>
+        <span>·</span>
+        <span data-player-age>18</span> yrs
+      </div>
+    </header>
+
+    <nav class="game-nav" aria-label="Main navigation">
+      <a href="home.html"><span class="nav-icon">⌂</span><span>Life</span></a>
+      <a href="school.html"><span class="nav-icon">▤</span><span>Activities</span></a>
+      <a href="relationships.html"><span class="nav-icon">♧</span><span>People</span></a>
+      <a href="news.html"><span class="nav-icon">◉</span><span>World</span></a>
+      <a href="achievements.html"><span class="nav-icon">◇</span><span>Progress</span></a>
+    </nav>
+  `;
+}
+
+function setActiveNav() {
+  const page = location.pathname.split('/').pop() || 'index.html';
+
+  document.querySelectorAll('.game-nav a').forEach(link => {
+    if (link.getAttribute('href') === page) {
+      link.classList.add('active');
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+}
+
+function renderPlayerSummary() {
+  const player = getPlayer();
+
+  document.querySelectorAll('[data-player-name]').forEach(el => {
+    el.textContent = player?.name || 'New player';
+  });
+
+  document.querySelectorAll('[data-player-age]').forEach(el => {
+    el.textContent = String(player?.age || 18);
+  });
+
+  document.querySelectorAll('[data-player-location]').forEach(el => {
+    el.textContent = player?.location || 'Not set';
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.querySelector('[data-game-nav]');
+
+  if (container) container.innerHTML = nav();
+
+  setActiveNav();
+  renderPlayerSummary();
+});
