@@ -1,0 +1,18 @@
+(()=>{'use strict';
+const KEY='realityPlayer',LIFE='realityLifeState';
+const read=(k,fallback)=>{try{return JSON.parse(localStorage.getItem(k))||fallback}catch{return fallback}};
+const player=read(KEY,null);if(!player){location.replace('character.html');return}
+const state=read(LIFE,{hunger:72,energy:78,mood:76,fitness:64,hygiene:82,cash:Number(player.cash??250000),day:1,hour:8,minute:15,log:[{text:'A new chapter begins. Your day is yours to shape.',time:'Today'}]});
+const clamp=n=>Math.max(0,Math.min(100,n)),money=n=>'UGX '+Math.round(n).toLocaleString('en-US'),$=s=>document.querySelector(s);
+function save(){localStorage.setItem(LIFE,JSON.stringify(state));localStorage.setItem(KEY,JSON.stringify({...player,cash:state.cash}))}
+function clockText(){return String(state.hour).padStart(2,'0')+':'+String(state.minute).padStart(2,'0')}
+function addLog(text){state.log.unshift({text,time:clockText()});state.log=state.log.slice(0,5)}
+function advance(min){state.minute+=min;while(state.minute>=60){state.minute-=60;state.hour++}while(state.hour>=24){state.hour-=24;state.day++}state.hunger=clamp(state.hunger-min*.035);state.energy=clamp(state.energy-min*.018);save()}
+function bar(name,value){const el=$('[data-need="'+name+'"]');if(el){el.textContent=Math.round(value)+'%';el.parentElement.querySelector('.meter i').style.width=value+'%'}}
+function render(){$('[data-name]').textContent=player.name||'Your home';$('[data-location]').textContent=player.location||'Your neighbourhood';$('[data-age]').textContent=player.age||18;$('[data-cash]').textContent=money(state.cash);$('#clock').textContent=clockText();$('#day').textContent='Day '+state.day;['hunger','energy','mood','fitness','hygiene'].forEach(k=>bar(k,state[k]));const feed=$('#activity-feed');feed.replaceChildren();state.log.slice(0,3).forEach(item=>{const row=document.createElement('div');row.className='activity';const dot=document.createElement('i');dot.className='dot';const p=document.createElement('p');p.textContent=item.text;const small=document.createElement('small');small.textContent=item.time;p.append(small);row.append(dot,p);feed.append(row)})}
+const choices={meal:{label:'You prepared a meal and took time to eat.',time:35,run:()=>{state.hunger=clamp(state.hunger+42);state.mood=clamp(state.mood+3)}},workout:{label:'You completed a short home workout.',time:40,run:()=>{state.fitness=clamp(state.fitness+5);state.energy=clamp(state.energy-13);state.mood=clamp(state.mood+7)}},rest:{label:'You took a quiet break and recharged.',time:30,run:()=>{state.energy=clamp(state.energy+17);state.mood=clamp(state.mood+4)}},shower:{label:'You freshened up and got ready for the day.',time:15,run:()=>{state.hygiene=clamp(state.hygiene+35);state.mood=clamp(state.mood+2)}},walk:{label:'You went out for a walk around the neighbourhood.',time:25,run:()=>{state.fitness=clamp(state.fitness+2);state.energy=clamp(state.energy-7);state.mood=clamp(state.mood+8)}}};
+function notify(message){const toast=$('#toast');toast.textContent=message;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2200)}
+document.querySelectorAll('[data-action]').forEach(btn=>btn.addEventListener('click',()=>{const c=choices[btn.dataset.action];if(!c)return;c.run();advance(c.time);addLog(c.label);render();notify(c.label+' · '+c.time+' minutes')}));
+document.querySelectorAll('[data-placeholder]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();notify(a.dataset.placeholder+' will be added in the next build stage.')}));
+render();
+})();
